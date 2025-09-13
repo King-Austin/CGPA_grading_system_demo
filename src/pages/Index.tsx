@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Course } from '@/data/courses';
-import Semester from '@/components/Semester';
+import YearCard from '@/components/YearCard';
 import CGPACalculator from '@/components/CGPACalculator';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -91,17 +91,8 @@ const Index = () => {
     });
   };
 
-  // Define academic years and semesters to display
-  const academicSemesters = [
-    { year: 1, semesterNum: 1 },
-    { year: 1, semesterNum: 2 },
-    { year: 2, semesterNum: 1 },
-    { year: 2, semesterNum: 2 },
-    { year: 3, semesterNum: 1 },
-    { year: 3, semesterNum: 2 },
-    { year: 4, semesterNum: 1 },
-    { year: 4, semesterNum: 2 },
-  ];
+  // Define academic years to display
+  const academicYears = [1, 2, 3, 4];
 
   // Calculate total statistics
   const totalCourses = Object.values(semestersData).reduce(
@@ -155,21 +146,33 @@ const Index = () => {
           <CGPACalculator allSemestersData={semestersData} />
         </div>
 
-        {/* Academic Semesters */}
+        {/* Academic Years */}
         <div className="space-y-8">
-          {academicSemesters.map(({ year, semesterNum }) => {
-            const semesterKey = `${year}-${semesterNum}`;
-            const coursesForSemester = Object.values(semestersData[semesterKey] || {});
+          {academicYears.map((year) => {
+            const semester1Key = `${year}-1`;
+            const semester2Key = `${year}-2`;
+            const semester1Courses = Object.values(semestersData[semester1Key] || {});
+            const semester2Courses = Object.values(semestersData[semester2Key] || {});
 
             return (
-              <Semester
-                key={semesterKey}
+              <YearCard
+                key={year}
                 year={year}
-                semesterNum={semesterNum}
-                courses={coursesForSemester}
-                onGradeChange={(code, grade) => handleGradeChange(year, semesterNum, code, grade)}
+                semester1Courses={semester1Courses}
+                semester2Courses={semester2Courses}
+                onGradeChange={(code, grade) => {
+                  // Determine which semester this course belongs to
+                  const isInSem1 = semester1Courses.some(c => c.code === code);
+                  const semesterNum = isInSem1 ? 1 : 2;
+                  handleGradeChange(year, semesterNum, code, grade);
+                }}
                 onAddCourse={handleAddCourse}
-                onRemoveCourse={(courseCode) => handleRemoveCourse(year, semesterNum, courseCode)}
+                onRemoveCourse={(courseCode) => {
+                  // Determine which semester this course belongs to
+                  const isInSem1 = semester1Courses.some(c => c.code === courseCode);
+                  const semesterNum = isInSem1 ? 1 : 2;
+                  handleRemoveCourse(year, semesterNum, courseCode);
+                }}
               />
             );
           })}

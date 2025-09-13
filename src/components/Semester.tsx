@@ -46,14 +46,14 @@ const Semester: React.FC<SemesterProps> = ({
   };
 
   return (
-    <Card className="overflow-hidden shadow-lg border-card-border">
-      <CardHeader className="bg-gradient-to-r from-primary/5 to-primary/10 border-b border-card-border">
+    <Card className="overflow-hidden shadow-md border-border/50">
+      <CardHeader className="bg-gradient-to-r from-accent/10 to-accent/5 border-b border-border/50 pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xl font-bold text-card-foreground flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <GraduationCap className="h-5 w-5 text-primary" />
+          <CardTitle className="text-lg font-semibold text-card-foreground flex items-center gap-2">
+            <div className="p-1.5 rounded-lg bg-primary/10">
+              <GraduationCap className="h-4 w-4 text-primary" />
             </div>
-            {getYearOrdinal(year)} Year, {getSemesterOrdinal(semesterNum)} Semester
+            {getSemesterOrdinal(semesterNum)} Semester
           </CardTitle>
           <div className="flex items-center gap-4">
             <div className="text-center">
