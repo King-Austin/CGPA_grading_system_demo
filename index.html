@@ -1,26 +1,115 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" itemscope itemtype="https://schema.org/WebApplication">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary Meta Tags -->
+    <title>Course Score Scribe - GPA/CGPA Tracker | Academic Grade Management</title>
+    <meta name="title" content="Course Score Scribe - GPA/CGPA Tracker | Academic Grade Management" />
+    <meta name="description" content="Free GPA calculator for university students. Track semester GPAs, calculate CGPA, monitor academic progress with live calculations, PDF reports, and PWA offline support." />
+    <meta name="keywords" content="GPA calculator, CGPA tracker, student grades, academic progress, university grading, semester GPA, cumulative GPA, grade calculator, academic tracker, student planner, course management, grade point average" />
+    <meta name="author" content="Nworahsoft" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+    <link rel="canonical" href="https://course-score-scribe.vercel.app/" />
+
+    <!-- Theme and App Configuration -->
     <meta name="theme-color" content="#3b82f6" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="GPA Tracker" />
-    <link rel="icon" type="image/x-icon" href="/icon-512.svg" />
+    <meta name="apple-mobile-web-app-title" content="Course Score Scribe" />
+    <meta name="application-name" content="Course Score Scribe" />
+
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icon-192.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.svg" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.svg" />
     <link rel="manifest" href="/manifest.json" />
-    <title>Student GPA/CGPA Tracker - Academic Grade Management</title>
-    <meta name="description" content="Comprehensive student GPA and CGPA calculator with live grade tracking, semester management, and academic progress monitoring for university students." />
-    <meta name="author" content="Nworahsoft" />
-    <meta name="keywords" content="GPA calculator, CGPA tracker, student grades, academic progress, university grading, semester GPA, cumulative GPA" />
 
-    <meta property="og:title" content="Student GPA/CGPA Tracker - Academic Grade Management" />
-    <meta property="og:description" content="Track your academic progress with live GPA calculations and comprehensive grade management for university students." />
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://course-score-scribe.vercel.app/" />
+    <meta property="og:title" content="Course Score Scribe - GPA/CGPA Tracker | Academic Grade Management" />
+    <meta property="og:description" content="Free GPA calculator for university students. Track semester GPAs, calculate CGPA, monitor academic progress with live calculations, PDF reports, and PWA offline support." />
+    <meta property="og:image" content="https://course-score-scribe.vercel.app/icon-512.svg" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:alt" content="Course Score Scribe - Academic Grade Tracking App" />
+    <meta property="og:site_name" content="Course Score Scribe" />
+    <meta property="og:locale" content="en_US" />
 
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://course-score-scribe.vercel.app/" />
+    <meta name="twitter:title" content="Course Score Scribe - GPA/CGPA Tracker | Academic Grade Management" />
+    <meta name="twitter:description" content="Free GPA calculator for university students. Track semester GPAs, calculate CGPA, monitor academic progress with live calculations, PDF reports, and PWA offline support." />
+    <meta name="twitter:image" content="https://course-score-scribe.vercel.app/icon-512.svg" />
+    <meta name="twitter:image:alt" content="Course Score Scribe - Academic Grade Tracking App" />
+    <meta name="twitter:creator" content="@nworahsoft" />
     <meta name="twitter:site" content="@nworahsoft" />
-</head>
+
+    <!-- LinkedIn -->
+    <meta property="og:image:secure_url" content="https://course-score-scribe.vercel.app/icon-512.svg" />
+
+    <!-- WhatsApp -->
+    <meta property="og:image:type" content="image/svg+xml" />
+
+    <!-- Structured Data / JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Course Score Scribe",
+      "description": "Free GPA calculator for university students. Track semester GPAs, calculate CGPA, monitor academic progress with live calculations, PDF reports, and PWA offline support.",
+      "url": "https://course-score-scribe.vercel.app/",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "Nworahsoft",
+        "url": "https://nworahsoft.tech"
+      },
+      "featureList": [
+        "Live GPA/CGPA calculations",
+        "Semester management",
+        "Grade tracking",
+        "PDF export",
+        "Offline support",
+        "Mobile responsive",
+        "Data persistence"
+      ],
+      "screenshot": "https://course-score-scribe.vercel.app/icon-512.svg",
+      "softwareVersion": "1.0.0",
+      "datePublished": "2025-01-13",
+      "inLanguage": "en-US"
+    }
+    </script>
+
+    <!-- Additional SEO Meta Tags -->
+    <meta name="geo.region" content="NG" />
+    <meta name="geo.country" content="Nigeria" />
+    <meta name="distribution" content="global" />
+    <meta name="rating" content="general" />
+    <meta name="classification" content="Education" />
+    <meta name="category" content="Educational Tools" />
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- DNS prefetch for external resources -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+  </head>
 
   <body>
     <div id="root"></div>
