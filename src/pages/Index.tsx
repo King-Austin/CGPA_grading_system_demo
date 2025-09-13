@@ -104,37 +104,38 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-6 max-w-5xl">
         {/* Header */}
-        <Card className="mb-8 overflow-hidden shadow-lg border-primary/20">
-          <CardHeader className="bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10 border-b">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-3xl font-bold text-card-foreground flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-primary/10">
-                  <GraduationCap className="h-8 w-8 text-primary" />
+        <Card className="mb-4 sm:mb-6 overflow-hidden shadow-lg border-primary/20">
+          <CardHeader className="bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10 border-b p-3 sm:p-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <CardTitle className="text-xl sm:text-2xl lg:text-3xl font-bold text-card-foreground flex items-center gap-2 sm:gap-3">
+                <div className="p-1.5 sm:p-2 rounded-lg bg-primary/10">
+                  <GraduationCap className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 text-primary" />
                 </div>
-                Student GPA/CGPA Tracker
+                <span className="hidden sm:inline">Student GPA/CGPA Tracker</span>
+                <span className="sm:hidden">GPA Tracker</span>
               </CardTitle>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 sm:gap-4">
                 <div className="text-center">
-                  <div className="text-sm text-muted-foreground">Total Courses</div>
-                  <Badge variant="outline" className="text-lg font-semibold">
+                  <div className="text-xs sm:text-sm text-muted-foreground">Total Courses</div>
+                  <Badge variant="outline" className="text-sm sm:text-lg font-semibold">
                     {totalCourses}
                   </Badge>
                 </div>
                 <div className="text-center">
-                  <div className="text-sm text-muted-foreground">Completed</div>
-                  <Badge variant="outline" className="text-lg font-semibold text-success">
+                  <div className="text-xs sm:text-sm text-muted-foreground">Completed</div>
+                  <Badge variant="outline" className="text-sm sm:text-lg font-semibold text-success">
                     {totalCompletedCourses}
                   </Badge>
                 </div>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="pt-6">
+          <CardContent className="pt-3 sm:pt-6 p-3 sm:p-6">
             <div className="flex items-center gap-2 text-muted-foreground">
-              <Calculator className="h-4 w-4" />
-              <span className="text-sm">
+              <Calculator className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="text-xs sm:text-sm">
                 Track your academic progress with live GPA calculations and comprehensive grade management.
               </span>
             </div>
@@ -142,12 +143,12 @@ const Index = () => {
         </Card>
 
         {/* CGPA Calculator */}
-        <div className="mb-8">
+        <div className="mb-4 sm:mb-6">
           <CGPACalculator allSemestersData={semestersData} />
         </div>
 
         {/* Academic Years */}
-        <div className="space-y-8">
+        <div className="space-y-4 sm:space-y-6">
           {academicYears.map((year) => {
             const semester1Key = `${year}-1`;
             const semester2Key = `${year}-2`;
@@ -179,11 +180,11 @@ const Index = () => {
         </div>
 
         {/* Footer */}
-        <Card className="mt-12 border-dashed border-2 border-muted">
-          <CardContent className="pt-6">
+        <Card className="mt-6 sm:mt-8 border-dashed border-2 border-muted">
+          <CardContent className="pt-4 sm:pt-6 p-3 sm:p-6">
             <div className="text-center text-muted-foreground">
-              <BookOpen className="h-8 w-8 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">
+              <BookOpen className="h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-2 opacity-50" />
+              <p className="text-xs sm:text-sm">
                 Your academic data is automatically saved locally and will persist between sessions.
               </p>
             </div>

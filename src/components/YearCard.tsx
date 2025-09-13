@@ -31,32 +31,32 @@ const YearCard: React.FC<YearCardProps> = ({
   const completedCourses = semester1Courses.filter(c => c.grade).length + semester2Courses.filter(c => c.grade).length;
 
   return (
-    <Card className="overflow-hidden shadow-xl border-primary/20 bg-gradient-to-br from-background to-accent/5">
-      <CardHeader className="bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10 border-b border-primary/20">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-2xl font-bold text-card-foreground flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-primary/15">
-              <GraduationCap className="h-6 w-6 text-primary" />
+    <Card className="overflow-hidden shadow-lg border-primary/20 bg-gradient-to-br from-background to-accent/5 max-w-6xl mx-auto">
+      <CardHeader className="bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10 border-b border-primary/20 p-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <CardTitle className="text-lg sm:text-xl font-bold text-card-foreground flex items-center gap-2">
+            <div className="p-2 rounded-lg bg-primary/15">
+              <GraduationCap className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
             </div>
             {getYearOrdinal(year)} Year
           </CardTitle>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <div className="text-center">
-              <div className="text-xs text-muted-foreground">Academic Sessions</div>
-              <Badge variant="outline" className="font-semibold">
+              <div className="text-xs text-muted-foreground">Sessions</div>
+              <Badge variant="outline" className="text-xs">
                 <Calendar className="h-3 w-3 mr-1" />
-                2 Semesters
+                2 Sem
               </Badge>
             </div>
             <div className="text-center">
-              <div className="text-xs text-muted-foreground">Total Courses</div>
-              <Badge variant="outline" className="font-semibold">
+              <div className="text-xs text-muted-foreground">Courses</div>
+              <Badge variant="outline" className="text-xs">
                 {totalCourses}
               </Badge>
             </div>
             <div className="text-center">
-              <div className="text-xs text-muted-foreground">Completed</div>
-              <Badge variant="outline" className="font-semibold text-success">
+              <div className="text-xs text-muted-foreground">Done</div>
+              <Badge variant="outline" className="text-xs text-success">
                 {completedCourses}
               </Badge>
             </div>
@@ -64,8 +64,8 @@ const YearCard: React.FC<YearCardProps> = ({
         </div>
       </CardHeader>
 
-      <CardContent className="p-6">
-        <div className="grid gap-6 lg:grid-cols-2">
+      <CardContent className="p-3 sm:p-4">
+        <div className="grid gap-3 sm:gap-4 lg:grid-cols-2">
           <Semester
             year={year}
             semesterNum={1}
