@@ -52,7 +52,7 @@ const CourseSelection: React.FC<CourseSelectionProps> = ({
         return 'bg-primary/10 text-primary border-primary/20';
       case 'elective':
         return 'bg-warning/10 text-warning border-warning/20';
-      case 'faculty':
+      case 'gss':
         return 'bg-success/10 text-success border-success/20';
       default:
         return 'bg-muted text-muted-foreground';

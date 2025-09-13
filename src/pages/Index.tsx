@@ -4,7 +4,8 @@ import YearCard from '@/components/YearCard';
 import CGPACalculator from '@/components/CGPACalculator';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { GraduationCap, Calculator, BookOpen } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { GraduationCap, Calculator, BookOpen, RotateCcw } from 'lucide-react';
 
 const LOCAL_STORAGE_KEY = 'gpaTrackerData';
 
@@ -91,6 +92,20 @@ const Index = () => {
     });
   };
 
+  const handleResetData = () => {
+    // Clear localStorage
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+    
+    // Reset state to initial empty structure
+    const initialData: AppData = {};
+    for (let year = 1; year <= 4; year++) {
+      for (let semester = 1; semester <= 2; semester++) {
+        initialData[`${year}-${semester}`] = {};
+      }
+    }
+    setSemestersData(initialData);
+  };
+
   // Define academic years to display
   const academicYears = [1, 2, 3, 4];
 
@@ -129,6 +144,15 @@ const Index = () => {
                     {totalCompletedCourses}
                   </Badge>
                 </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleResetData}
+                  className="flex items-center gap-2 text-destructive hover:text-destructive hover:bg-destructive/10"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                  Reset All
+                </Button>
               </div>
             </div>
           </CardHeader>
@@ -186,6 +210,7 @@ const Index = () => {
               <BookOpen className="h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-2 opacity-50" />
               <p className="text-xs sm:text-sm">
                 Your academic data is automatically saved locally and will persist between sessions.
+                Proudly built by <a href="https://nworahsoft.tech" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary transition-colors">nworahsoft inc.</a>.
               </p>
             </div>
           </CardContent>
