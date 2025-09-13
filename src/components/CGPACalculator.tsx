@@ -59,17 +59,17 @@ const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => 
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <CardContent className="p-4 sm:p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {/* CGPA Display */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div className="text-center">
-              <div className={`text-6xl font-bold ${getGPAColor(cgpa)} mb-2`}>
+              <div className={`text-4xl sm:text-5xl lg:text-6xl font-bold ${getGPAColor(cgpa)} mb-2`}>
                 {formatGPA(cgpa)}
               </div>
               <Badge 
                 variant="outline" 
-                className={`text-lg px-4 py-2 ${
+                className={`text-sm sm:text-lg px-3 sm:px-4 py-1 sm:py-2 ${
                   cgpa >= 4.5 ? 'border-success text-success' :
                   cgpa >= 3.5 ? 'border-primary text-primary' :
                   cgpa >= 2.5 ? 'border-warning text-warning' :
@@ -78,12 +78,12 @@ const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => 
               >
                 {gpaClass.class}
               </Badge>
-              <p className="text-sm text-muted-foreground mt-2">{gpaClass.description}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-2">{gpaClass.description}</p>
             </div>
 
             {/* Progress */}
             <div className="space-y-2">
-              <div className="flex justify-between text-sm">
+              <div className="flex justify-between text-xs sm:text-sm">
                 <span className="text-muted-foreground">Academic Progress</span>
                 <span className="font-medium">{completedCredits}/{totalCredits} Credits</span>
               </div>
@@ -95,16 +95,16 @@ const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => 
           </div>
 
           {/* Statistics */}
-          <div className="space-y-4">
-            <h3 className="font-semibold text-card-foreground mb-3">Academic Statistics</h3>
+          <div className="space-y-3 sm:space-y-4">
+            <h3 className="font-semibold text-card-foreground text-sm sm:text-base mb-2 sm:mb-3">Academic Statistics</h3>
             
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-muted/50 rounded-lg p-3 text-center">
-                <div className="text-lg font-bold text-card-foreground">{allCourses.length}</div>
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              <div className="bg-muted/50 rounded-lg p-2 sm:p-3 text-center">
+                <div className="text-sm sm:text-lg font-bold text-card-foreground">{allCourses.length}</div>
                 <div className="text-xs text-muted-foreground">Total Courses</div>
               </div>
-              <div className="bg-muted/50 rounded-lg p-3 text-center">
-                <div className="text-lg font-bold text-card-foreground">
+              <div className="bg-muted/50 rounded-lg p-2 sm:p-3 text-center">
+                <div className="text-sm sm:text-lg font-bold text-card-foreground">
                   {allCourses.filter(c => c.grade).length}
                 </div>
                 <div className="text-xs text-muted-foreground">Graded Courses</div>
@@ -114,7 +114,7 @@ const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => 
             {/* Grade Distribution */}
             {Object.keys(gradeDistribution).length > 0 && (
               <div>
-                <h4 className="text-sm font-medium text-muted-foreground mb-2">Grade Distribution</h4>
+                <h4 className="text-xs sm:text-sm font-medium text-muted-foreground mb-2">Grade Distribution</h4>
                 <div className="flex flex-wrap gap-1">
                   {Object.entries(gradeDistribution).map(([grade, count]) => (
                     <Badge key={grade} variant="outline" className="text-xs">

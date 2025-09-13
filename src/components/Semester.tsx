@@ -47,24 +47,24 @@ const Semester: React.FC<SemesterProps> = ({
 
   return (
     <Card className="overflow-hidden shadow-md border-border/50">
-      <CardHeader className="bg-gradient-to-r from-accent/10 to-accent/5 border-b border-border/50 pb-4">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold text-card-foreground flex items-center gap-2">
+      <CardHeader className="bg-gradient-to-r from-accent/10 to-accent/5 border-b border-border/50 p-3 sm:p-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3">
+          <CardTitle className="text-base sm:text-lg font-semibold text-card-foreground flex items-center gap-2">
             <div className="p-1.5 rounded-lg bg-primary/10">
-              <GraduationCap className="h-4 w-4 text-primary" />
+              <GraduationCap className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
             </div>
             {getSemesterOrdinal(semesterNum)} Semester
           </CardTitle>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="text-center">
               <div className="text-xs text-muted-foreground">Credits</div>
-              <Badge variant="outline" className="font-semibold">
+              <Badge variant="outline" className="text-xs sm:text-sm font-semibold">
                 {completedCredits}/{totalCredits}
               </Badge>
             </div>
             <div className="text-center">
-              <div className="text-xs text-muted-foreground">Semester GPA</div>
-              <div className={`text-lg font-bold ${getGPAColor(semesterGPA)}`}>
+              <div className="text-xs text-muted-foreground">GPA</div>
+              <div className={`text-sm sm:text-lg font-bold ${getGPAColor(semesterGPA)}`}>
                 {formatGPA(semesterGPA)}
               </div>
             </div>
@@ -72,9 +72,9 @@ const Semester: React.FC<SemesterProps> = ({
         </div>
         
         {semesterGPA > 0 && (
-          <div className="mt-3 flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">
+          <div className="mt-2 sm:mt-3 flex items-center gap-2">
+            <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
+            <span className="text-xs sm:text-sm text-muted-foreground">
               {gpaClass.class} - {gpaClass.description}
             </span>
           </div>

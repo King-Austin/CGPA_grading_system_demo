@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Course } from '@/data/courses';
 import YearCard from '@/components/YearCard';
 import CGPACalculator from '@/components/CGPACalculator';
+import DataExportImport from '@/components/DataExportImport';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -119,7 +120,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5">
-      <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-6 max-w-5xl">
+      <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-6 max-w-4xl lg:max-w-5xl xl:max-w-6xl">
         {/* Header */}
         <Card className="mb-4 sm:mb-6 overflow-hidden shadow-lg border-primary/20">
           <CardHeader className="bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10 border-b p-3 sm:p-6">
@@ -131,27 +132,30 @@ const Index = () => {
                 <span className="hidden sm:inline">Student GPA/CGPA Tracker</span>
                 <span className="sm:hidden">GPA Tracker</span>
               </CardTitle>
-              <div className="flex items-center gap-3 sm:gap-4">
-                <div className="text-center">
-                  <div className="text-xs sm:text-sm text-muted-foreground">Total Courses</div>
-                  <Badge variant="outline" className="text-sm sm:text-lg font-semibold">
-                    {totalCourses}
-                  </Badge>
-                </div>
-                <div className="text-center">
-                  <div className="text-xs sm:text-sm text-muted-foreground">Completed</div>
-                  <Badge variant="outline" className="text-sm sm:text-lg font-semibold text-success">
-                    {totalCompletedCourses}
-                  </Badge>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="text-center">
+                    <div className="text-xs sm:text-sm text-muted-foreground">Total Courses</div>
+                    <Badge variant="outline" className="text-sm sm:text-lg font-semibold">
+                      {totalCourses}
+                    </Badge>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xs sm:text-sm text-muted-foreground">Completed</div>
+                    <Badge variant="outline" className="text-sm sm:text-lg font-semibold text-success">
+                      {totalCompletedCourses}
+                    </Badge>
+                  </div>
                 </div>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={handleResetData}
-                  className="flex items-center gap-2 text-destructive hover:text-destructive hover:bg-destructive/10"
+                  className="flex items-center gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10 text-xs sm:text-sm"
                 >
-                  <RotateCcw className="h-4 w-4" />
-                  Reset All
+                  <RotateCcw className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">Reset All</span>
+                  <span className="sm:hidden">Reset</span>
                 </Button>
               </div>
             </div>
@@ -169,6 +173,15 @@ const Index = () => {
         {/* CGPA Calculator */}
         <div className="mb-4 sm:mb-6">
           <CGPACalculator allSemestersData={semestersData} />
+        </div>
+
+        {/* Data Export */}
+        <div className="mb-4 sm:mb-6">
+          <DataExportImport
+            semestersData={semestersData}
+            totalCourses={totalCourses}
+            totalCompletedCourses={totalCompletedCourses}
+          />
         </div>
 
         {/* Academic Years */}
