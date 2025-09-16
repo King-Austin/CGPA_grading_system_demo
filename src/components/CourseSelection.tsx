@@ -74,19 +74,19 @@ const CourseSelection: React.FC<CourseSelectionProps> = ({
 
   return (
     <Card className="border-primary/20 bg-gradient-to-r from-accent/30 to-accent/10">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <Plus className="h-5 w-5 text-primary" />
+      <CardHeader className="pb-3 sm:pb-4">
+        <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+          <Plus className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
           Add Course to Semester
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
           <Select 
             value={selectedCourseCode} 
             onValueChange={setSelectedCourseCode}
           >
-            <SelectTrigger className="flex-1">
+            <SelectTrigger className="flex-1 h-10 sm:h-10">
               <SelectValue placeholder="Select a course to add..." />
             </SelectTrigger>
             <SelectContent className="max-h-80">
@@ -152,7 +152,7 @@ const CourseSelection: React.FC<CourseSelectionProps> = ({
           <Button 
             onClick={handleAddClick} 
             disabled={!selectedCourseCode}
-            className="bg-primary hover:bg-primary-dark shadow-md"
+            className="bg-primary hover:bg-primary-dark shadow-md h-10 px-4 sm:px-6"
           >
             <Plus className="h-4 w-4 mr-2" />
             Add

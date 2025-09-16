@@ -120,20 +120,20 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5">
-      <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-6 max-w-4xl lg:max-w-5xl xl:max-w-6xl">
+      <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-6 max-w-4xl lg:max-w-5xl xl:max-w-6xl">
         {/* Header */}
-        <Card className="mb-4 sm:mb-6 overflow-hidden shadow-lg border-primary/20">
-          <CardHeader className="bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10 border-b p-3 sm:p-6">
+        <Card className="mb-3 sm:mb-6 overflow-hidden shadow-lg border-primary/20">
+          <CardHeader className="bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10 border-b p-4 sm:p-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <CardTitle className="text-xl sm:text-2xl lg:text-3xl font-bold text-card-foreground flex items-center gap-2 sm:gap-3">
-                <div className="p-1.5 sm:p-2 rounded-lg bg-primary/10">
+              <CardTitle className="text-lg sm:text-2xl lg:text-3xl font-bold text-card-foreground flex items-center gap-2 sm:gap-3">
+                <div className="p-2 sm:p-2 rounded-lg bg-primary/10">
                   <GraduationCap className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 text-primary" />
                 </div>
                 <span className="hidden sm:inline">Student GPA/CGPA Tracker</span>
                 <span className="sm:hidden">GPA Tracker</span>
               </CardTitle>
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
-                <div className="flex items-center gap-2 sm:gap-3">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-3 w-full sm:w-auto">
+                <div className="flex items-center gap-3 sm:gap-3">
                   <div className="text-center">
                     <div className="text-xs sm:text-sm text-muted-foreground">Total Courses</div>
                     <Badge variant="outline" className="text-sm sm:text-lg font-semibold">
@@ -151,19 +151,19 @@ const Index = () => {
                   variant="outline"
                   size="sm"
                   onClick={handleResetData}
-                  className="flex items-center gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10 text-xs sm:text-sm"
+                  className="flex items-center gap-2 text-destructive hover:text-destructive hover:bg-destructive/10 text-sm sm:text-sm min-h-9 px-4"
                 >
-                  <RotateCcw className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <RotateCcw className="h-4 w-4 sm:h-4 sm:w-4" />
                   <span className="hidden sm:inline">Reset All</span>
                   <span className="sm:hidden">Reset</span>
                 </Button>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="pt-3 sm:pt-6 p-3 sm:p-6">
+          <CardContent className="pt-4 sm:pt-6 p-4 sm:p-6">
             <div className="flex items-center gap-2 text-muted-foreground">
-              <Calculator className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="text-xs sm:text-sm">
+              <Calculator className="h-4 w-4 sm:h-4 sm:w-4" />
+              <span className="text-sm sm:text-sm">
                 Track your academic progress with live GPA calculations and comprehensive grade management.
               </span>
             </div>
@@ -171,7 +171,7 @@ const Index = () => {
         </Card>
 
         {/* CGPA Calculator */}
-        <div className="mb-4 sm:mb-6">
+        <div className="mb-3 sm:mb-6">
           <CGPACalculator allSemestersData={semestersData} />
         </div>
 
@@ -185,7 +185,7 @@ const Index = () => {
         </div>
 
         {/* Academic Years */}
-        <div className="space-y-4 sm:space-y-6">
+        <div className="space-y-3 sm:space-y-6">
           {academicYears.map((year) => {
             const semester1Key = `${year}-1`;
             const semester2Key = `${year}-2`;
@@ -217,11 +217,11 @@ const Index = () => {
         </div>
 
         {/* Footer */}
-        <Card className="mt-6 sm:mt-8 border-dashed border-2 border-muted">
-          <CardContent className="pt-4 sm:pt-6 p-3 sm:p-6">
+        <Card className="mt-4 sm:mt-8 border-dashed border-2 border-muted">
+          <CardContent className="pt-4 sm:pt-6 p-4 sm:p-6">
             <div className="text-center text-muted-foreground">
               <BookOpen className="h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-2 opacity-50" />
-              <p className="text-xs sm:text-sm">
+              <p className="text-sm sm:text-sm">
                 Your academic data is automatically saved locally and will persist between sessions.
                 Proudly built by <a href="https://nworahsoft.tech" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary transition-colors">nworahsoft inc.</a>.
               </p>

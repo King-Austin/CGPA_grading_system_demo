@@ -53,7 +53,7 @@ const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => 
   return (
     <Card className="overflow-hidden shadow-xl border-2 border-primary/20">
       <CardHeader className={`text-white ${getClassGradient(cgpa)}`}>
-        <CardTitle className="text-2xl font-bold flex items-center gap-3">
+        <CardTitle className="text-lg sm:text-2xl font-bold flex items-center gap-2 sm:gap-3">
           {getClassIcon(gpaClass.class)}
           Cumulative Grade Point Average (CGPA)
         </CardTitle>
@@ -64,12 +64,12 @@ const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => 
           {/* CGPA Display */}
           <div className="space-y-3 sm:space-y-4">
             <div className="text-center">
-              <div className={`text-4xl sm:text-5xl lg:text-6xl font-bold ${getGPAColor(cgpa)} mb-2`}>
+              <div className={`text-5xl sm:text-5xl lg:text-6xl font-bold ${getGPAColor(cgpa)} mb-2`}>
                 {formatGPA(cgpa)}
               </div>
               <Badge 
                 variant="outline" 
-                className={`text-sm sm:text-lg px-3 sm:px-4 py-1 sm:py-2 ${
+                className={`text-sm sm:text-lg px-3 sm:px-4 py-2 sm:py-2 ${
                   cgpa >= 4.5 ? 'border-success text-success' :
                   cgpa >= 3.5 ? 'border-primary text-primary' :
                   cgpa >= 2.5 ? 'border-warning text-warning' :
@@ -78,17 +78,17 @@ const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => 
               >
                 {gpaClass.class}
               </Badge>
-              <p className="text-xs sm:text-sm text-muted-foreground mt-2">{gpaClass.description}</p>
+              <p className="text-sm sm:text-sm text-muted-foreground mt-2">{gpaClass.description}</p>
             </div>
 
             {/* Progress */}
             <div className="space-y-2">
-              <div className="flex justify-between text-xs sm:text-sm">
+              <div className="flex justify-between text-sm sm:text-sm">
                 <span className="text-muted-foreground">Academic Progress</span>
                 <span className="font-medium">{completedCredits}/{totalCredits} Credits</span>
               </div>
               <Progress value={progressPercentage} className="h-2" />
-              <p className="text-xs text-muted-foreground text-center">
+              <p className="text-sm text-muted-foreground text-center">
                 {Math.round(progressPercentage)}% completed
               </p>
             </div>
@@ -96,15 +96,15 @@ const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => 
 
           {/* Statistics */}
           <div className="space-y-3 sm:space-y-4">
-            <h3 className="font-semibold text-card-foreground text-sm sm:text-base mb-2 sm:mb-3">Academic Statistics</h3>
+            <h3 className="font-semibold text-card-foreground text-base sm:text-base mb-3 sm:mb-3">Academic Statistics</h3>
             
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              <div className="bg-muted/50 rounded-lg p-2 sm:p-3 text-center">
-                <div className="text-sm sm:text-lg font-bold text-card-foreground">{allCourses.length}</div>
+              <div className="bg-muted/50 rounded-lg p-3 sm:p-3 text-center">
+                <div className="text-lg sm:text-lg font-bold text-card-foreground">{allCourses.length}</div>
                 <div className="text-xs text-muted-foreground">Total Courses</div>
               </div>
-              <div className="bg-muted/50 rounded-lg p-2 sm:p-3 text-center">
-                <div className="text-sm sm:text-lg font-bold text-card-foreground">
+              <div className="bg-muted/50 rounded-lg p-3 sm:p-3 text-center">
+                <div className="text-lg sm:text-lg font-bold text-card-foreground">
                   {allCourses.filter(c => c.grade).length}
                 </div>
                 <div className="text-xs text-muted-foreground">Graded Courses</div>
@@ -114,7 +114,7 @@ const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => 
             {/* Grade Distribution */}
             {Object.keys(gradeDistribution).length > 0 && (
               <div>
-                <h4 className="text-xs sm:text-sm font-medium text-muted-foreground mb-2">Grade Distribution</h4>
+                <h4 className="text-sm sm:text-sm font-medium text-muted-foreground mb-2">Grade Distribution</h4>
                 <div className="flex flex-wrap gap-1">
                   {Object.entries(gradeDistribution).map(([grade, count]) => (
                     <Badge key={grade} variant="outline" className="text-xs">

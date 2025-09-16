@@ -47,9 +47,9 @@ const DataExportImport: React.FC<DataExportImportProps> = ({
 
   return (
     <Card className="border-primary/20 bg-gradient-to-r from-accent/30 to-accent/10">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <Download className="h-5 w-5 text-primary" />
+      <CardHeader className="pb-3 sm:pb-4">
+        <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+          <Download className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
           Export Academic Report
         </CardTitle>
       </CardHeader>
@@ -62,13 +62,13 @@ const DataExportImport: React.FC<DataExportImportProps> = ({
               variant="outline"
               size="sm"
               onClick={handleExportPDF}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 h-10 px-4"
             >
               <Download className="h-4 w-4" />
               Export as PDF Report
             </Button>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Generate a comprehensive PDF report of your academic progress and GPA.
           </p>
         </div>

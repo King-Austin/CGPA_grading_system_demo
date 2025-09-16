@@ -129,4 +129,34 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Mobile-first optimizations */
+  @media (max-width: 640px) {
+    /* Ensure minimum touch target sizes */
+    button, [role="button"], select, input {
+      min-height: 44px;
+    }
+    
+    /* Optimize tap targets spacing */
+    .tap-target {
+      min-height: 44px;
+      min-width: 44px;
+    }
+    
+    /* Prevent horizontal scrolling */
+    html, body {
+      overflow-x: hidden;
+    }
+  }
+  
+  /* Smooth scrolling for better mobile experience */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Better focus states for accessibility */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
 }

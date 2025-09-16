@@ -42,26 +42,26 @@ const CourseRow: React.FC<CourseRowProps> = ({
   };
 
   return (
-    <div className="group flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg border border-card-border bg-card hover:shadow-md transition-all duration-200">
+    <div className="group flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 sm:p-4 rounded-lg border border-card-border bg-card hover:shadow-md transition-all duration-200">
       <div className="flex-1 min-w-0">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-2 sm:mb-1">
-          <h4 className="font-semibold text-card-foreground text-sm sm:text-base">{course.code}</h4>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-2 mb-2 sm:mb-1">
+          <h4 className="font-semibold text-card-foreground text-base sm:text-base">{course.code}</h4>
           <Badge variant="outline" className={`${getCategoryColor(course.category)} text-xs`}>
             {course.category || 'core'}
           </Badge>
         </div>
-        <p className="text-xs sm:text-sm text-muted-foreground truncate">{course.title}</p>
+        <p className="text-sm sm:text-sm text-muted-foreground truncate">{course.title}</p>
       </div>
       
-      <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 w-full sm:w-auto">
+      <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-4 w-full sm:w-auto">
         <div className="text-center">
           <div className="text-xs text-muted-foreground">Credits</div>
           <div className="font-semibold text-card-foreground text-sm">{course.creditUnit}</div>
         </div>
         
-        <div className="w-20 sm:w-24">
+        <div className="w-24 sm:w-24">
           <Select value={grade || ''} onValueChange={(value) => onGradeChange(course.code, value)}>
-            <SelectTrigger className="h-8 text-xs sm:text-sm">
+            <SelectTrigger className="h-10 text-sm sm:text-sm">
               <SelectValue placeholder="Grade" />
             </SelectTrigger>
             <SelectContent>
@@ -84,9 +84,9 @@ const CourseRow: React.FC<CourseRowProps> = ({
           variant="outline"
           size="sm"
           onClick={() => onRemoveCourse(course.code)}
-          className="h-8 w-8 p-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
+          className="h-10 w-10 p-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
         >
-          <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
+          <Trash2 className="h-4 w-4 sm:h-4 sm:w-4" />
         </Button>
       </div>
     </div>
