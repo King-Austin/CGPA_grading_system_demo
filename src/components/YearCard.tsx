@@ -32,7 +32,7 @@ const YearCard: React.FC<YearCardProps> = ({
 
   return (
     <Card className="overflow-hidden shadow-lg border-primary/20 bg-gradient-to-br from-background to-accent/5 max-w-6xl mx-auto">
-      <CardHeader className="bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10 border-b border-primary/20 p-4">
+      <CardHeader className="bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10 border-b border-primary/20 p-4 sm:p-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <CardTitle className="text-lg sm:text-xl font-bold text-card-foreground flex items-center gap-2">
             <div className="p-2 rounded-lg bg-primary/15">
@@ -40,7 +40,7 @@ const YearCard: React.FC<YearCardProps> = ({
             </div>
             {getYearOrdinal(year)} Year
           </CardTitle>
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-3">
             <div className="text-center">
               <div className="text-xs text-muted-foreground">Sessions</div>
               <Badge variant="outline" className="text-xs">
@@ -64,8 +64,8 @@ const YearCard: React.FC<YearCardProps> = ({
         </div>
       </CardHeader>
 
-      <CardContent className="p-3 sm:p-4">
-        <div className="grid gap-3 sm:gap-4 lg:grid-cols-2">
+      <CardContent className="p-4 sm:p-4">
+        <div className="grid gap-4 sm:gap-4 lg:grid-cols-2">
           <Semester
             year={year}
             semesterNum={1}

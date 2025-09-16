@@ -47,24 +47,24 @@ const Semester: React.FC<SemesterProps> = ({
 
   return (
     <Card className="overflow-hidden shadow-md border-border/50">
-      <CardHeader className="bg-gradient-to-r from-accent/10 to-accent/5 border-b border-border/50 p-3 sm:p-4">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3">
+      <CardHeader className="bg-gradient-to-r from-accent/10 to-accent/5 border-b border-border/50 p-4 sm:p-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-3">
           <CardTitle className="text-base sm:text-lg font-semibold text-card-foreground flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-primary/10">
-              <GraduationCap className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+            <div className="p-2 rounded-lg bg-primary/10">
+              <GraduationCap className="h-4 w-4 sm:h-4 sm:w-4 text-primary" />
             </div>
             {getSemesterOrdinal(semesterNum)} Semester
           </CardTitle>
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-3 sm:gap-3">
             <div className="text-center">
               <div className="text-xs text-muted-foreground">Credits</div>
-              <Badge variant="outline" className="text-xs sm:text-sm font-semibold">
+              <Badge variant="outline" className="text-sm sm:text-sm font-semibold">
                 {completedCredits}/{totalCredits}
               </Badge>
             </div>
             <div className="text-center">
               <div className="text-xs text-muted-foreground">GPA</div>
-              <div className={`text-sm sm:text-lg font-bold ${getGPAColor(semesterGPA)}`}>
+              <div className={`text-lg sm:text-lg font-bold ${getGPAColor(semesterGPA)}`}>
                 {formatGPA(semesterGPA)}
               </div>
             </div>
@@ -72,20 +72,20 @@ const Semester: React.FC<SemesterProps> = ({
         </div>
         
         {semesterGPA > 0 && (
-          <div className="mt-2 sm:mt-3 flex items-center gap-2">
-            <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
-            <span className="text-xs sm:text-sm text-muted-foreground">
+          <div className="mt-3 sm:mt-3 flex items-center gap-2">
+            <TrendingUp className="h-4 w-4 sm:h-4 sm:w-4 text-muted-foreground" />
+            <span className="text-sm sm:text-sm text-muted-foreground">
               {gpaClass.class} - {gpaClass.description}
             </span>
           </div>
         )}
       </CardHeader>
 
-      <CardContent className="p-6">
+      <CardContent className="p-4 sm:p-6">
         {courses.length === 0 ? (
-          <div className="text-center py-8">
-            <BookOpen className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
-            <h3 className="text-lg font-medium text-muted-foreground mb-2">
+          <div className="text-center py-6 sm:py-8">
+            <BookOpen className="h-10 w-10 sm:h-12 sm:w-12 mx-auto text-muted-foreground/50 mb-3 sm:mb-4" />
+            <h3 className="text-base sm:text-lg font-medium text-muted-foreground mb-2">
               No courses added yet
             </h3>
             <p className="text-sm text-muted-foreground">
@@ -106,7 +106,7 @@ const Semester: React.FC<SemesterProps> = ({
           </div>
         )}
 
-        <div className="mt-6">
+        <div className="mt-4 sm:mt-6">
           <CourseSelection
             year={year}
             semester={semesterNum}
