@@ -124,13 +124,18 @@ const Index = () => {
         {/* Header */}
         <Card className="mb-3 sm:mb-6 overflow-hidden shadow-lg border-primary/20">
           <CardHeader className="bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10 border-b p-3 sm:p-6">
-            <div className="flex flex-col gap-3">
-              <CardTitle className="text-base sm:text-2xl lg:text-3xl font-bold text-card-foreground flex items-center gap-2">
-                <div className="p-1.5 sm:p-2 rounded-lg bg-primary/10 flex-shrink-0">
-                  <GraduationCap className="h-4 w-4 sm:h-6 sm:w-6 lg:h-8 lg:w-8 text-primary" />
-                </div>
-                <span className="truncate">GPA/CGPA Tracker</span>
-              </CardTitle>
+            <div className="flex flex-col gap-2 sm:gap-3">
+              <div className="flex flex-col gap-1">
+                <CardTitle className="text-base sm:text-2xl lg:text-3xl font-bold text-card-foreground flex items-center gap-2">
+                  <div className="p-1.5 sm:p-2 rounded-lg bg-primary/10 flex-shrink-0">
+                    <GraduationCap className="h-4 w-4 sm:h-6 sm:w-6 lg:h-8 lg:w-8 text-primary" />
+                  </div>
+                  <span className="truncate">GPA/CGPA Tracker</span>
+                </CardTitle>
+                <p className="text-xs sm:text-sm text-muted-foreground ml-10 sm:ml-12 font-medium">
+                  Department of Electronics and Computer Engineering
+                </p>
+              </div>
               <div className="flex flex-row items-center justify-between gap-2 w-full">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div className="text-center">
@@ -158,11 +163,21 @@ const Index = () => {
               </div>
             </div>
           </CardHeader>
-          <CardContent className="pt-3 sm:pt-6 p-3 sm:p-6">
+          <CardContent className="pt-3 sm:pt-6 p-3 sm:p-6 space-y-3">
             <div className="flex items-start gap-2 text-muted-foreground">
               <Calculator className="h-4 w-4 flex-shrink-0 mt-0.5" />
               <span className="text-xs sm:text-sm leading-relaxed">
                 Track your academic progress with live GPA calculations.
+              </span>
+            </div>
+            <div className="flex items-start gap-2 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+              <div className="flex-shrink-0 mt-0.5">
+                <svg className="h-4 w-4 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zm-7-4a1 1 0 11-2 0 1 1 0 012 0z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <span className="text-xs sm:text-sm text-blue-900 dark:text-blue-200 leading-relaxed">
+                <strong>100% Local Storage:</strong> All your data is saved locally on your device. Nothing is sent to any server. Come back anytime and your grades will be exactly as you left them.
               </span>
             </div>
           </CardContent>
