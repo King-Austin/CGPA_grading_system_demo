@@ -47,7 +47,7 @@ export const exportGPAReportAsPDF = async (
   pdf.setFontSize(14);
   pdf.setTextColor(0, 51, 102); // Dark blue
   pdf.setFont('helvetica', 'bold');
-  pdf.text('FEDERAL UNIVERSITY OF TECHNOLOGY, MINNA', pageWidth / 2, yPosition, { align: 'center' });
+  pdf.text('NNAMDI AZIKIWE UNIVERSITY, AWKA', pageWidth / 2, yPosition, { align: 'center' });
   yPosition += 6;
   
   pdf.setFontSize(11);
