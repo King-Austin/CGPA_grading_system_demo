@@ -1,4 +1,4 @@
-// Course data extracted from the academic records provided
+// Physics Department Course Data
 export interface Course {
   code: string;
   title: string;
@@ -9,91 +9,58 @@ export interface Course {
 }
 
 export const ALL_COURSES: Course[] = [
-  // First Year - First Semester
-  { code: 'GSS 101', title: 'Use of English I', creditUnit: 1, year: 1, semester: 1, category: 'gss' },
-  { code: 'GSS 105', title: 'Humanities', creditUnit: 2, year: 1, semester: 1, category: 'gss' },
-  { code: 'GSS 107', title: 'Nigerian Peoples and Culture', creditUnit: 2, year: 1, semester: 1, category: 'gss' },
-  { code: 'GSS 109', title: 'Basic Igbo Studies I', creditUnit: 1, year: 1, semester: 1, category: 'gss' },
+  // YEAR ONE (100 LEVEL) - First Semester
+  { code: 'MAT101', title: 'General Mathematics', creditUnit: 3, year: 1, semester: 1, category: 'core' },
+  { code: 'PHY101', title: 'General Physics', creditUnit: 3, year: 1, semester: 1, category: 'core' },
+  { code: 'ICH111', title: 'Inorganic Chemistry', creditUnit: 2, year: 1, semester: 1, category: 'core' },
+  { code: 'GST101', title: 'Use of English', creditUnit: 2, year: 1, semester: 1, category: 'gss' },
+  { code: 'GST103', title: 'General Studies', creditUnit: 2, year: 1, semester: 1, category: 'gss' },
 
-  { code: 'MAT 101', title: 'Elementary Mathematics I', creditUnit: 3, year: 1, semester: 1, category: 'core' },
-  { code: 'PHY 101', title: 'General Physics I', creditUnit: 3, year: 1, semester: 1, category: 'core' },
-  { code: 'PHY 107', title: 'General Physics Laboratory I', creditUnit: 1, year: 1, semester: 1, category: 'core' },
-  { code: 'ICH 101', title: 'Basic Organic Chemistry', creditUnit: 2, year: 1, semester: 1, category: 'core' },
-  { code: 'ICH 111', title: 'General Basic Inorganic Chemistry', creditUnit: 2, year: 1, semester: 1, category: 'core' },
-  { code: 'BUS 101', title: 'Introduction to Business', creditUnit: 2, year: 1, semester: 1, category: 'faculty' },
-  { code: 'FEG 101', title: 'Engineering Mathematics I', creditUnit: 3, year: 1, semester: 1, category: 'core' },
+  // YEAR ONE (100 LEVEL) - Second Semester
+  { code: 'MAT102', title: 'General Mathematics II', creditUnit: 3, year: 1, semester: 2, category: 'core' },
+  { code: 'PHY102', title: 'General Physics II', creditUnit: 3, year: 1, semester: 2, category: 'core' },
+  { code: 'ICH102', title: 'Physical Chemistry', creditUnit: 2, year: 1, semester: 2, category: 'core' },
+  { code: 'GST102', title: 'Use of English II', creditUnit: 2, year: 1, semester: 2, category: 'gss' },
+  { code: 'GST104', title: 'General Studies', creditUnit: 2, year: 1, semester: 2, category: 'gss' },
 
-  // First Year - Second Semester
-  { code: 'GSS 102', title: 'Use of English II', creditUnit: 1, year: 1, semester: 2, category: 'gss' },
-  { code: 'GSS 106', title: 'Social Science', creditUnit: 2, year: 1, semester: 2, category: 'gss' },
-  { code: 'GSS 110', title: 'Basic Igbo Studies II', creditUnit: 1, year: 1, semester: 2, category: 'gss' },
-  { code: 'MAT 102', title: 'Elementary Mathematics II', creditUnit: 3, year: 1, semester: 2, category: 'core' },
-  { code: 'PHY 102', title: 'General Physics II', creditUnit: 3, year: 1, semester: 2, category: 'core' },
-  { code: 'PHY 108', title: 'General Physics Laboratory II', creditUnit: 1, year: 1, semester: 2, category: 'core' },
-  { code: 'ICH 102', title: 'Basic General Physical Chemistry', creditUnit: 2, year: 1, semester: 2, category: 'core' },
-  { code: 'ICH 112', title: 'Basic Practical Chemistry', creditUnit: 2, year: 1, semester: 2, category: 'core' },
-  { code: 'FEG 102', title: 'Engineering Mathematics II', creditUnit: 3, year: 1, semester: 2, category: 'core' },
-  { code: 'FEG 103', title: 'Circuit Theory I', creditUnit: 2, year: 1, semester: 2, category: 'core' },
+  // YEAR TWO (200 LEVEL) - First Semester
+  { code: 'MAT201', title: 'Mathematical Methods', creditUnit: 3, year: 2, semester: 1, category: 'core' },
+  { code: 'PHY201', title: 'Electricity & Magnetism', creditUnit: 3, year: 2, semester: 1, category: 'core' },
+  { code: 'ICH201', title: 'Organic Chemistry I', creditUnit: 2, year: 2, semester: 1, category: 'core' },
+  { code: 'STA201', title: 'Statistics', creditUnit: 2, year: 2, semester: 1, category: 'core' },
 
+  // YEAR TWO (200 LEVEL) - Second Semester
+  { code: 'MAT202', title: 'Differential Equations', creditUnit: 3, year: 2, semester: 2, category: 'core' },
+  { code: 'PHY202', title: 'Waves & Optics', creditUnit: 3, year: 2, semester: 2, category: 'core' },
+  { code: 'ICH202', title: 'Organic Chemistry II', creditUnit: 2, year: 2, semester: 2, category: 'core' },
+  { code: 'CSC201', title: 'Computer Programming', creditUnit: 2, year: 2, semester: 2, category: 'core' },
 
-  // Second Year - First Semester
-  { code: 'MAT 201', title: 'Linear Algebra', creditUnit: 3, year: 2, semester: 1, category: 'core' },
-  { code: 'CSE 201', title: 'Computer Programming I', creditUnit: 2, year: 2, semester: 1, category: 'core' },
-  { code: 'ICH 221', title: 'General Physical Chemistry', creditUnit: 2, year: 2, semester: 1, category: 'core' },
-  { code: 'FEG 281', title: 'Workshop Practice', creditUnit: 2, year: 2, semester: 1, category: 'core' },
-  { code: 'FEG 201', title: 'Applied Electricity I', creditUnit: 3, year: 2, semester: 1, category: 'core' },
-  { code: 'FEG 211', title: 'Applied Mechanics', creditUnit: 2, year: 2, semester: 1, category: 'core' },
-  { code: 'FEG 213', title: 'Engineering Drawing I', creditUnit: 2, year: 2, semester: 1, category: 'core' },
-  { code: 'FEG 221', title: 'Fluid Mechanics', creditUnit: 2, year: 2, semester: 1, category: 'core' },
-  { code: 'FEG 250', title: 'Material Science', creditUnit: 3, year: 2, semester: 1, category: 'core' },
-  
+  // YEAR THREE (300 LEVEL) - First Semester
+  { code: 'MAT301', title: 'Advanced Mathematics I', creditUnit: 3, year: 3, semester: 1, category: 'core' },
+  { code: 'PHY301', title: 'Modern Physics', creditUnit: 3, year: 3, semester: 1, category: 'core' },
+  { code: 'PHY303', title: 'Electronics I', creditUnit: 3, year: 3, semester: 1, category: 'core' },
 
-  // Second Year - Second Semester
-  { code: 'MAT 202', title: 'Elementary Differential Equations', creditUnit: 3, year: 2, semester: 2, category: 'core' },
-  { code: 'CSE 202', title: 'Computer Programming II', creditUnit: 2, year: 2, semester: 2, category: 'core' },
-  { code: 'BUS 204', title: 'Principles Management', creditUnit: 2, year: 2, semester: 2, category: 'elective' },
-  { code: 'FEG 202', title: 'Applied Electricity II', creditUnit: 3, year: 2, semester: 2, category: 'core' },
-  { code: 'FEG 212', title: 'Applied Mechanics II (Dynamics)', creditUnit: 2, year: 2, semester: 2, category: 'core' },
-  { code: 'FEG 214', title: 'Engineering Drawing II', creditUnit: 3, year: 2, semester: 2, category: 'core' },
-  { code: 'FEG 215', title: 'Strength of Materials II', creditUnit: 3, year: 2, semester: 2, category: 'core' },
-  { code: 'FEG 242', title: 'Thermodynamics', creditUnit: 2, year: 2, semester: 2, category: 'core' },
-  { code: 'FEG 280', title: 'Engineers in Society', creditUnit: 2, year: 2, semester: 2, category: 'core' },
-  { code: 'FEG 282', title: 'Workshop Practice II', creditUnit: 2, year: 2, semester: 2, category: 'core' },
+  // YEAR THREE (300 LEVEL) - Second Semester
+  { code: 'MAT302', title: 'Advanced Mathematics II', creditUnit: 3, year: 3, semester: 2, category: 'core' },
+  { code: 'PHY304', title: 'Electronics II', creditUnit: 3, year: 3, semester: 2, category: 'core' },
+  { code: 'PHY306', title: 'Solid State Physics', creditUnit: 3, year: 3, semester: 2, category: 'core' },
 
+  // YEAR FOUR (400 LEVEL) - First Semester
+  { code: 'PHY401', title: 'Nuclear Physics', creditUnit: 3, year: 4, semester: 1, category: 'core' },
+  { code: 'PHY403', title: 'Computational Methods', creditUnit: 3, year: 4, semester: 1, category: 'core' },
+  { code: 'PHY405', title: 'Research Methods', creditUnit: 2, year: 4, semester: 1, category: 'core' },
 
-  // Third Year - First Semester
-  { code: 'FEG 303', title: 'Engineering Mathematics 3', creditUnit: 3, year: 3, semester: 1, category: 'faculty' },
-  { code: 'ELE 343', title: 'Electro-Mechanical Devices and Machine', creditUnit: 2, year: 3, semester: 1, category: 'core' },
-  { code: 'ELE 311', title: 'Circuit Theory 1', creditUnit: 2, year: 3, semester: 1, category: 'core' },
-  { code: 'ECE 323', title: 'Electronic Devices and Circuits', creditUnit: 2, year: 3, semester: 1, category: 'core' },
-  { code: 'ELE 353', title: 'Power Systems', creditUnit: 3, year: 3, semester: 1, category: 'core' },
-  { code: 'ELE 341', title: 'Electromagnetic Fields and Waves', creditUnit: 3, year: 3, semester: 1, category: 'core' },
-  { code: 'ECE 331', title: 'Signals and Systems', creditUnit: 2, year: 3, semester: 1, category: 'core' },
-  { code: 'ECE 321', title: 'Telecommunications 1', creditUnit: 2, year: 3, semester: 1, category: 'core' },
-  { code: 'ECE 333', title: 'Digital System Design 1', creditUnit: 2, year: 3, semester: 1, category: 'core' },
+  // YEAR FOUR (400 LEVEL) - Second Semester
+  { code: 'SIW400', title: 'Industrial Training (SIWES)', creditUnit: 6, year: 4, semester: 2, category: 'core' },
 
-  // Third Year - Second Semester
-  { code: 'FEG 372', title: 'Instrumentation and Measurement', creditUnit: 2, year: 3, semester: 2, category: 'faculty' },
-  { code: 'ELE 344', title: 'Electro-Mechanical Devices and Machine 2', creditUnit: 2, year: 3, semester: 2, category: 'core' },
-  { code: 'ELE 312', title: 'Circuit Theory 2', creditUnit: 3, year: 3, semester: 2, category: 'core' },
-  { code: 'ECE 326', title: 'Physical Electronics', creditUnit: 2, year: 3, semester: 2, category: 'core' },
-  { code: 'ECE 328', title: 'Electronic Devices and Circuits 2', creditUnit: 3, year: 3, semester: 2, category: 'core' },
-  { code: 'ELE 382', title: 'Feedback and Control Systems', creditUnit: 2, year: 3, semester: 2, category: 'core' },
-  { code: 'ELE 342', title: 'Electrodynamics', creditUnit: 2, year: 3, semester: 2, category: 'core' },
-  { code: 'ECE 322', title: 'Telecommunications 2', creditUnit: 2, year: 3, semester: 2, category: 'core' },
-  { code: 'ECE 334', title: 'Digital System Design 2', creditUnit: 2, year: 3, semester: 2, category: 'core' },
+  // YEAR FIVE (500 LEVEL) - First Semester
+  { code: 'PHY501', title: 'Advanced Topics', creditUnit: 3, year: 5, semester: 1, category: 'core' },
+  { code: 'PHY503', title: 'Seminar', creditUnit: 2, year: 5, semester: 1, category: 'core' },
+  { code: 'PHY505', title: 'Elective', creditUnit: 2, year: 5, semester: 1, category: 'elective' },
 
-
-
-  // Fourth Year Courses (from mobile screenshot)
-  { code: 'ECE 405', title: 'Microprocessors & Microcomputers', creditUnit: 3, year: 4, semester: 1, category: 'core' },
-  { code: 'ECE 421', title: 'Assembly Language Programming', creditUnit: 2, year: 4, semester: 1, category: 'core' },
-  { code: 'ECE 427', title: 'Advanced Circuit Techniques', creditUnit: 3, year: 4, semester: 1, category: 'core' },
-  { code: 'ECE 431', title: 'Fundamentals of Digital Communication', creditUnit: 3, year: 4, semester: 1, category: 'core' },
-  { code: 'ELE 403', title: 'Circuit Theory II', creditUnit: 3, year: 4, semester: 1, category: 'core' },
-  { code: 'ELE 473', title: 'Instrumentation and Measurement', creditUnit: 3, year: 4, semester: 1, category: 'core' },
-  { code: 'CVE 421', title: 'Engineering Contracts and Specifications', creditUnit: 2, year: 4, semester: 1, category: 'elective' },
-  { code: 'FEG 404', title: 'Engineering Mathematics IV', creditUnit: 3, year: 4, semester: 1, category: 'faculty' },
+  // YEAR FIVE (500 LEVEL) - Second Semester
+  { code: 'PHY502', title: 'Project', creditUnit: 6, year: 5, semester: 2, category: 'core' },
+  { code: 'ENT500', title: 'Entrepreneurship', creditUnit: 2, year: 5, semester: 2, category: 'gss' },
 ];
 
 export const getCoursesByYearAndSemester = (year: number, semester: number): Course[] => {
