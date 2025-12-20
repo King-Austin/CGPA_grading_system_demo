@@ -1,4 +1,5 @@
 import jsPDF from 'jspdf';
+import { GRADE_SCALE } from './gradeUtils';
 
 export interface ExportData {
   semestersData: Record<string, Record<string, any>>;
@@ -17,85 +18,190 @@ export interface CourseWithGrade {
   category?: string;
 }
 
-// Export GPA report as PDF
+// Helper function to get grade points
+const getGradePoints = (grade?: string): number => {
+  if (!grade) return 0;
+  const gradeObj = GRADE_SCALE.find(g => g.letter === grade);
+  return gradeObj?.points || 0;
+};
+
+// Helper function to get year ordinal
+const getYearOrdinal = (year: number): string => {
+  const ordinals = ['', 'First', 'Second', 'Third', 'Fourth', 'Fifth'];
+  return ordinals[year] || `Year ${year}`;
+};
+
+// Improved PDF export with student name
 export const exportGPAReportAsPDF = async (
   data: ExportData,
-  elementId?: string
+  studentName: string = 'Student'
 ): Promise<void> => {
   const pdf = new jsPDF('p', 'mm', 'a4');
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
-  let yPosition = 20;
+  const margin = 15;
+  const contentWidth = pageWidth - (margin * 2);
+  let yPosition = margin;
+
+  // Header - Institution
+  pdf.setFontSize(14);
+  pdf.setTextColor(0, 51, 102); // Dark blue
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('FEDERAL UNIVERSITY OF TECHNOLOGY, MINNA', pageWidth / 2, yPosition, { align: 'center' });
+  yPosition += 6;
+  
+  pdf.setFontSize(11);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('Department of Electronics and Computer Engineering', pageWidth / 2, yPosition, { align: 'center' });
+  yPosition += 8;
 
   // Title
-  pdf.setFontSize(20);
-  pdf.setTextColor(59, 130, 246); // Blue color
-  pdf.text('Student GPA/CGPA Report', pageWidth / 2, yPosition, { align: 'center' });
-  yPosition += 15;
-
-  // Date
   pdf.setFontSize(12);
+  pdf.setFont('helvetica', 'bold');
   pdf.setTextColor(0, 0, 0);
-  pdf.text(`Generated on: ${new Date(data.exportDate).toLocaleDateString()}`, 20, yPosition);
-  yPosition += 10;
+  pdf.text('Academic Grade Report', pageWidth / 2, yPosition, { align: 'center' });
+  yPosition += 12;
 
-  // Summary Statistics
-  pdf.setFontSize(14);
-  pdf.setTextColor(59, 130, 246);
-  pdf.text('Academic Summary', 20, yPosition);
-  yPosition += 10;
+  // Student Information Box
+  pdf.setDrawColor(0, 51, 102);
+  pdf.setLineWidth(0.5);
+  pdf.rect(margin, yPosition - 2, contentWidth, 18);
+  
+  pdf.setFontSize(10);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('Student Name:', margin + 5, yPosition + 3);
+  pdf.setFont('helvetica', 'normal');
+  pdf.text(studentName, margin + 40, yPosition + 3);
+  
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('Report Date:', margin + 5, yPosition + 9);
+  pdf.setFont('helvetica', 'normal');
+  pdf.text(new Date(data.exportDate).toLocaleDateString(), margin + 40, yPosition + 9);
 
-  pdf.setFontSize(11);
-  pdf.setTextColor(0, 0, 0);
-  pdf.text(`Cumulative GPA (CGPA): ${data.cgpa.toFixed(2)}`, 25, yPosition);
+  yPosition += 24;
+
+  // CGPA Summary Section
+  pdf.setFontSize(10);
+  pdf.setFont('helvetica', 'bold');
+  pdf.setTextColor(0, 51, 102);
+  pdf.text('Cumulative Grade Point Average (CGPA)', margin, yPosition);
   yPosition += 8;
-  pdf.text(`Total Courses: ${data.totalCourses}`, 25, yPosition);
-  yPosition += 8;
-  pdf.text(`Completed Courses: ${data.totalCompletedCourses}`, 25, yPosition);
-  yPosition += 15;
+
+  // CGPA Box
+  pdf.setDrawColor(0, 51, 102);
+  pdf.setFillColor(230, 240, 250);
+  pdf.rect(margin, yPosition - 5, contentWidth, 12, 'FD');
+  
+  pdf.setFontSize(16);
+  pdf.setFont('helvetica', 'bold');
+  pdf.setTextColor(0, 51, 102);
+  pdf.text(`${data.cgpa.toFixed(2)}`, margin + 10, yPosition + 3);
+  
+  pdf.setFontSize(9);
+  pdf.setFont('helvetica', 'normal');
+  pdf.text(`Total Courses: ${data.totalCourses} | Graded: ${data.totalCompletedCourses}`, margin + 80, yPosition + 3);
+
+  yPosition += 20;
 
   // Course Details by Semester
-  pdf.setFontSize(14);
-  pdf.setTextColor(59, 130, 246);
-  pdf.text('Course Details by Semester', 20, yPosition);
-  yPosition += 10;
+  pdf.setFontSize(10);
+  pdf.setFont('helvetica', 'bold');
+  pdf.setTextColor(0, 51, 102);
+  pdf.text('Academic Record by Semester', margin, yPosition);
+  yPosition += 8;
 
-  Object.entries(data.semestersData).forEach(([semesterKey, courses]) => {
-    if (yPosition > pageHeight - 50) {
-      pdf.addPage();
-      yPosition = 20;
-    }
+  Object.entries(data.semestersData)
+    .sort((a, b) => {
+      const [yearA, semA] = a[0].split('-').map(Number);
+      const [yearB, semB] = b[0].split('-').map(Number);
+      return yearA === yearB ? semA - semB : yearA - yearB;
+    })
+    .forEach(([semesterKey, courses], index) => {
+      const courseEntries = Object.values(courses as Record<string, CourseWithGrade>);
+      if (courseEntries.length === 0) return;
 
-    pdf.setFontSize(12);
-    pdf.setTextColor(59, 130, 246);
-    const [year, semester] = semesterKey.split('-');
-    pdf.text(`Year ${year}, Semester ${semester}`, 20, yPosition);
-    yPosition += 8;
-
-    pdf.setFontSize(10);
-    pdf.setTextColor(0, 0, 0);
-
-    Object.values(courses as Record<string, CourseWithGrade>).forEach((course: CourseWithGrade) => {
-      if (yPosition > pageHeight - 20) {
+      const requiredHeight = courseEntries.length * 7 + 15;
+      if (yPosition + requiredHeight > pageHeight - 20) {
         pdf.addPage();
-        yPosition = 20;
+        yPosition = margin;
       }
 
-      const gradeText = course.grade ? ` - Grade: ${course.grade}` : ' - Not graded';
-      pdf.text(`${course.code}: ${course.title} (${course.creditUnit} CU)${gradeText}`, 25, yPosition);
-      yPosition += 6;
+      // Semester Header
+      const [year, semester] = semesterKey.split('-');
+      pdf.setFontSize(9);
+      pdf.setFont('helvetica', 'bold');
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFillColor(0, 51, 102);
+      pdf.rect(margin, yPosition - 3, contentWidth, 6, 'F');
+      pdf.text(`${getYearOrdinal(Number(year))} Year - Semester ${semester}`, margin + 5, yPosition + 1);
+      yPosition += 8;
+
+      // Table Header
+      pdf.setFontSize(8);
+      pdf.setFont('helvetica', 'bold');
+      pdf.setTextColor(0, 0, 0);
+      pdf.setDrawColor(200, 200, 200);
+
+      const colPositions = {
+        code: margin + 3,
+        title: margin + 25,
+        credits: margin + 100,
+        grade: margin + 120,
+        points: margin + 140,
+      };
+
+      pdf.text('Code', colPositions.code, yPosition);
+      pdf.text('Course Title', colPositions.title, yPosition);
+      pdf.text('Credit', colPositions.credits, yPosition);
+      pdf.text('Grade', colPositions.grade, yPosition);
+      pdf.text('Points', colPositions.points, yPosition);
+      yPosition += 5;
+
+      // Separator line
+      pdf.setDrawColor(100, 100, 100);
+      pdf.line(margin, yPosition - 1, margin + contentWidth, yPosition - 1);
+      yPosition += 2;
+
+      // Course rows
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(8);
+      courseEntries.forEach((course: CourseWithGrade) => {
+        const gradePoints = getGradePoints(course.grade);
+        
+        pdf.text(course.code, colPositions.code, yPosition);
+        
+        // Title with text wrapping
+        const titleWidth = 75;
+        const splitTitle = pdf.splitTextToSize(course.title, titleWidth);
+        pdf.text(splitTitle, colPositions.title, yPosition);
+        
+        pdf.text(course.creditUnit.toString(), colPositions.credits, yPosition);
+        pdf.text(course.grade || '-', colPositions.grade, yPosition);
+        pdf.text(gradePoints > 0 ? gradePoints.toFixed(2) : '-', colPositions.points, yPosition);
+        
+        yPosition += 6;
+      });
+
+      yPosition += 3;
     });
 
-    yPosition += 5;
-  });
-
   // Footer
-  const footerY = pageHeight - 15;
   pdf.setFontSize(8);
-  pdf.setTextColor(128, 128, 128);
-  pdf.text('Generated by Course Score Scribe - GPA Tracker', pageWidth / 2, footerY, { align: 'center' });
+  pdf.setTextColor(100, 100, 100);
+  pdf.setFont('helvetica', 'italic');
+  
+  const footerY = pageHeight - 10;
+  pdf.text('Generated by GPA/CGPA Tracker - Department of Electronics and Computer Engineering', pageWidth / 2, footerY, { align: 'center' });
+  
+  // Page numbers
+  const totalPages = pdf.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    pdf.setPage(i);
+    pdf.setFontSize(8);
+    pdf.text(`Page ${i} of ${totalPages}`, pageWidth / 2, pageHeight - 5, { align: 'center' });
+  }
 
-  // Save the PDF
-  const fileName = `gpa-report-${new Date().toISOString().split('T')[0]}.pdf`;
+  // Save the PDF with student name
+  const fileName = `${studentName.replace(/\s+/g, '_')}_GPA_Report_${new Date().toISOString().split('T')[0]}.pdf`;
   pdf.save(fileName);
 };
