@@ -51,25 +51,25 @@ const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => 
   };
 
   return (
-    <Card className="overflow-hidden shadow-xl border-2 border-primary/20">
+    <Card className="overflow-hidden shadow-xl border-2 border-primary/20 w-full">
       <CardHeader className={`text-white ${getClassGradient(cgpa)}`}>
-        <CardTitle className="text-lg sm:text-2xl font-bold flex items-center gap-2 sm:gap-3">
-          {getClassIcon(gpaClass.class)}
-          Cumulative Grade Point Average (CGPA)
+        <CardTitle className="text-sm sm:text-2xl font-bold flex items-center gap-2">
+          <span className="flex-shrink-0">{getClassIcon(gpaClass.class)}</span>
+          <span className="line-clamp-2 leading-tight">CGPA Calculator</span>
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="p-4 sm:p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+      <CardContent className="p-3 sm:p-6">
+        <div className="flex flex-col md:grid md:grid-cols-2 gap-4 sm:gap-6">
           {/* CGPA Display */}
           <div className="space-y-3 sm:space-y-4">
             <div className="text-center">
-              <div className={`text-5xl sm:text-5xl lg:text-6xl font-bold ${getGPAColor(cgpa)} mb-2`}>
+              <div className={`text-4xl sm:text-5xl lg:text-6xl font-bold ${getGPAColor(cgpa)} mb-2`}>
                 {formatGPA(cgpa)}
               </div>
               <Badge 
                 variant="outline" 
-                className={`text-sm sm:text-lg px-3 sm:px-4 py-2 sm:py-2 ${
+                className={`text-xs sm:text-base px-2 sm:px-4 py-1 sm:py-2 ${
                   cgpa >= 4.5 ? 'border-success text-success' :
                   cgpa >= 3.5 ? 'border-primary text-primary' :
                   cgpa >= 2.5 ? 'border-warning text-warning' :
@@ -78,17 +78,17 @@ const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => 
               >
                 {gpaClass.class}
               </Badge>
-              <p className="text-sm sm:text-sm text-muted-foreground mt-2">{gpaClass.description}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-2 px-2 line-clamp-2">{gpaClass.description}</p>
             </div>
 
             {/* Progress */}
             <div className="space-y-2">
-              <div className="flex justify-between text-sm sm:text-sm">
-                <span className="text-muted-foreground">Academic Progress</span>
-                <span className="font-medium">{completedCredits}/{totalCredits} Credits</span>
+              <div className="flex justify-between text-xs sm:text-sm gap-2">
+                <span className="text-muted-foreground whitespace-nowrap">Progress</span>
+                <span className="font-medium whitespace-nowrap">{completedCredits}/{totalCredits} Credits</span>
               </div>
               <Progress value={progressPercentage} className="h-2" />
-              <p className="text-sm text-muted-foreground text-center">
+              <p className="text-xs sm:text-sm text-muted-foreground text-center">
                 {Math.round(progressPercentage)}% completed
               </p>
             </div>
@@ -96,26 +96,26 @@ const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => 
 
           {/* Statistics */}
           <div className="space-y-3 sm:space-y-4">
-            <h3 className="font-semibold text-card-foreground text-base sm:text-base mb-3 sm:mb-3">Academic Statistics</h3>
+            <h3 className="font-semibold text-card-foreground text-sm sm:text-base mb-2">Statistics</h3>
             
-            <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              <div className="bg-muted/50 rounded-lg p-3 sm:p-3 text-center">
-                <div className="text-lg sm:text-lg font-bold text-card-foreground">{allCourses.length}</div>
-                <div className="text-xs text-muted-foreground">Total Courses</div>
+            <div className="grid grid-cols-2 gap-2 sm:gap-4">
+              <div className="bg-muted/50 rounded-lg p-2 sm:p-3 text-center">
+                <div className="text-base sm:text-lg font-bold text-card-foreground">{allCourses.length}</div>
+                <div className="text-xs text-muted-foreground whitespace-nowrap">Courses</div>
               </div>
-              <div className="bg-muted/50 rounded-lg p-3 sm:p-3 text-center">
-                <div className="text-lg sm:text-lg font-bold text-card-foreground">
+              <div className="bg-muted/50 rounded-lg p-2 sm:p-3 text-center">
+                <div className="text-base sm:text-lg font-bold text-card-foreground">
                   {allCourses.filter(c => c.grade).length}
                 </div>
-                <div className="text-xs text-muted-foreground">Graded Courses</div>
+                <div className="text-xs text-muted-foreground whitespace-nowrap">Graded</div>
               </div>
             </div>
 
             {/* Grade Distribution */}
             {Object.keys(gradeDistribution).length > 0 && (
               <div>
-                <h4 className="text-sm sm:text-sm font-medium text-muted-foreground mb-2">Grade Distribution</h4>
-                <div className="flex flex-wrap gap-1">
+                <h4 className="text-xs sm:text-sm font-medium text-muted-foreground mb-2">Grade Distribution</h4>
+                <div className="flex flex-wrap gap-1.5">
                   {Object.entries(gradeDistribution).map(([grade, count]) => (
                     <Badge key={grade} variant="outline" className="text-xs">
                       {grade}: {count}
@@ -128,9 +128,9 @@ const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => 
         </div>
 
         {cgpa === 0 && (
-          <div className="text-center py-6 text-muted-foreground">
-            <BookCheck className="h-8 w-8 mx-auto mb-2 opacity-50" />
-            <p>Start adding grades to see your CGPA calculation.</p>
+          <div className="text-center py-4 sm:py-6 text-muted-foreground">
+            <BookCheck className="h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-2 opacity-50" />
+            <p className="text-xs sm:text-sm px-2">Start adding grades to see your CGPA.</p>
           </div>
         )}
       </CardContent>

@@ -42,34 +42,34 @@ const CourseRow: React.FC<CourseRowProps> = ({
   };
 
   return (
-    <div className="group flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 sm:p-4 rounded-lg border border-card-border bg-card hover:shadow-md transition-all duration-200">
-      <div className="flex-1 min-w-0">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-2 mb-2 sm:mb-1">
-          <h4 className="font-semibold text-card-foreground text-base sm:text-base">{course.code}</h4>
-          <Badge variant="outline" className={`${getCategoryColor(course.category)} text-xs`}>
-            {course.category || 'core'}
-          </Badge>
+    <div className="group flex flex-col gap-2 p-3 sm:p-4 rounded-lg border border-card-border bg-card hover:shadow-md transition-all duration-200 w-full">
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-1.5 mb-1">
+            <h4 className="font-semibold text-card-foreground text-sm sm:text-base">{course.code}</h4>
+            <Badge variant="outline" className={`${getCategoryColor(course.category)} text-xs flex-shrink-0`}>
+              {course.category || 'core'}
+            </Badge>
+          </div>
+          <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{course.title}</p>
         </div>
-        <p className="text-sm sm:text-sm text-muted-foreground truncate">{course.title}</p>
+        <Badge variant="outline" className="text-xs font-semibold flex-shrink-0">
+          {course.creditUnit} CU
+        </Badge>
       </div>
       
-      <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-4 w-full sm:w-auto">
-        <div className="text-center">
-          <div className="text-xs text-muted-foreground">Credits</div>
-          <div className="font-semibold text-card-foreground text-sm">{course.creditUnit}</div>
-        </div>
-        
-        <div className="w-24 sm:w-24">
+      <div className="flex items-center gap-2 w-full">
+        <div className="flex-1">
           <Select value={grade || ''} onValueChange={(value) => onGradeChange(course.code, value)}>
-            <SelectTrigger className="h-10 text-sm sm:text-sm">
-              <SelectValue placeholder="Grade" />
+            <SelectTrigger className="h-10 text-xs sm:text-sm w-full">
+              <SelectValue placeholder="Select Grade" />
             </SelectTrigger>
             <SelectContent>
               {GRADE_SCALE.map((gradeOption) => (
                 <SelectItem 
                   key={gradeOption.letter} 
                   value={gradeOption.letter}
-                  className="text-center text-sm"
+                  className="text-xs sm:text-sm"
                 >
                   <span className={getGradeColor(gradeOption.letter)}>
                     {gradeOption.letter} ({gradeOption.points})
@@ -84,9 +84,9 @@ const CourseRow: React.FC<CourseRowProps> = ({
           variant="outline"
           size="sm"
           onClick={() => onRemoveCourse(course.code)}
-          className="h-10 w-10 p-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
+          className="h-10 w-10 p-0 flex-shrink-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
         >
-          <Trash2 className="h-4 w-4 sm:h-4 sm:w-4" />
+          <Trash2 className="h-4 w-4" />
         </Button>
       </div>
     </div>

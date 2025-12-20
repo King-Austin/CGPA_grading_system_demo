@@ -73,41 +73,41 @@ const CourseSelection: React.FC<CourseSelectionProps> = ({
   }
 
   return (
-    <Card className="border-primary/20 bg-gradient-to-r from-accent/30 to-accent/10">
-      <CardHeader className="pb-3 sm:pb-4">
-        <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-          <Plus className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-          Add Course to Semester
+    <Card className="border-primary/20 bg-gradient-to-r from-accent/30 to-accent/10 w-full">
+      <CardHeader className="pb-2 sm:pb-3 p-3 sm:p-4">
+        <CardTitle className="text-sm sm:text-base flex items-center gap-2">
+          <Plus className="h-4 w-4 text-primary flex-shrink-0" />
+          <span className="whitespace-nowrap">Add Course</span>
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="flex flex-col sm:flex-row gap-3">
+      <CardContent className="p-3 sm:p-4 pt-0">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
           <Select 
             value={selectedCourseCode} 
             onValueChange={setSelectedCourseCode}
           >
-            <SelectTrigger className="flex-1 h-10 sm:h-10">
-              <SelectValue placeholder="Select a course to add..." />
+            <SelectTrigger className="flex-1 h-10 text-xs sm:text-sm">
+              <SelectValue placeholder="Select course..." />
             </SelectTrigger>
-            <SelectContent className="max-h-80">
+            <SelectContent className="max-h-60 sm:max-h-80">
               {availableCourses.length > 0 && (
                 <>
-                  <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground border-b">
+                  <div className="px-2 py-1 text-xs font-medium text-muted-foreground border-b">
                     Recommended for Year {year}, Semester {semester}
                   </div>
                   {availableCourses.map(course => (
                     <SelectItem 
                       key={course.code} 
                       value={course.code}
-                      className="flex items-center justify-between py-3"
+                      className="py-2"
                     >
-                      <div className="flex items-center gap-2 w-full">
-                        <div className="flex-1">
-                          <div className="font-medium">{course.code}</div>
+                      <div className="flex items-start justify-between gap-2 w-full min-w-0">
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium text-xs sm:text-sm truncate">{course.code}</div>
                           <div className="text-xs text-muted-foreground truncate">{course.title}</div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className={getCategoryColor(course.category)}>
+                        <div className="flex items-center gap-1 flex-shrink-0">
+                          <Badge variant="outline" className={`${getCategoryColor(course.category)} text-xs`}>
                             {course.category}
                           </Badge>
                           <span className="text-xs font-medium">{course.creditUnit} CU</span>
@@ -120,26 +120,26 @@ const CourseSelection: React.FC<CourseSelectionProps> = ({
               
               {otherCourses.length > 0 && (
                 <>
-                  <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground border-b border-t">
-                    Other Available Courses
+                  <div className="px-2 py-1 text-xs font-medium text-muted-foreground border-b border-t">
+                    Other Courses
                   </div>
                   {otherCourses.map(course => (
                     <SelectItem 
                       key={course.code} 
                       value={course.code}
-                      className="flex items-center justify-between py-3"
+                      className="py-2"
                     >
-                      <div className="flex items-center gap-2 w-full">
-                        <div className="flex-1">
-                          <div className="font-medium">{course.code}</div>
+                      <div className="flex items-start justify-between gap-2 w-full min-w-0">
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium text-xs sm:text-sm truncate">{course.code}</div>
                           <div className="text-xs text-muted-foreground truncate">{course.title}</div>
-                          <div className="text-xs text-muted-foreground">Year {course.year}, Sem {course.semester}</div>
+                          <div className="text-xs text-muted-foreground">Yr {course.year}, Sem {course.semester}</div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className={getCategoryColor(course.category)}>
+                        <div className="flex items-center gap-1 flex-shrink-0">
+                          <Badge variant="outline" className={`${getCategoryColor(course.category)} text-xs`}>
                             {course.category}
                           </Badge>
-                          <span className="text-xs font-medium">{course.creditUnit} CU</span>
+                          <span className="text-xs font-medium whitespace-nowrap">{course.creditUnit}</span>
                         </div>
                       </div>
                     </SelectItem>
@@ -152,9 +152,9 @@ const CourseSelection: React.FC<CourseSelectionProps> = ({
           <Button 
             onClick={handleAddClick} 
             disabled={!selectedCourseCode}
-            className="bg-primary hover:bg-primary-dark shadow-md h-10 px-4 sm:px-6"
+            className="bg-primary hover:bg-primary-dark shadow-md h-10 px-4 sm:px-6 text-xs sm:text-sm whitespace-nowrap"
           >
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="h-4 w-4 mr-1.5" />
             Add
           </Button>
         </div>

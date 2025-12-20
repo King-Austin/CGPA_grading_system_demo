@@ -46,54 +46,49 @@ const Semester: React.FC<SemesterProps> = ({
   };
 
   return (
-    <Card className="overflow-hidden shadow-md border-border/50">
-      <CardHeader className="bg-gradient-to-r from-accent/10 to-accent/5 border-b border-border/50 p-4 sm:p-4">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-3">
-          <CardTitle className="text-base sm:text-lg font-semibold text-card-foreground flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <GraduationCap className="h-4 w-4 sm:h-4 sm:w-4 text-primary" />
-            </div>
-            {getSemesterOrdinal(semesterNum)} Semester
-          </CardTitle>
-          <div className="flex items-center gap-3 sm:gap-3">
-            <div className="text-center">
-              <div className="text-xs text-muted-foreground">Credits</div>
-              <Badge variant="outline" className="text-sm sm:text-sm font-semibold">
+    <Card className="overflow-hidden shadow-md border-border/50 w-full">
+      <CardHeader className="bg-gradient-to-r from-accent/10 to-accent/5 border-b border-border/50 p-3 sm:p-4">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between gap-2">
+            <CardTitle className="text-sm sm:text-lg font-semibold text-card-foreground flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-primary/10 flex-shrink-0">
+                <GraduationCap className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
+              </div>
+              <span className="whitespace-nowrap">{getSemesterOrdinal(semesterNum)} Sem</span>
+            </CardTitle>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Badge variant="outline" className="text-xs font-semibold whitespace-nowrap">
                 {completedCredits}/{totalCredits}
               </Badge>
-            </div>
-            <div className="text-center">
-              <div className="text-xs text-muted-foreground">GPA</div>
-              <div className={`text-lg sm:text-lg font-bold ${getGPAColor(semesterGPA)}`}>
+              <div className={`text-base sm:text-lg font-bold ${getGPAColor(semesterGPA)} whitespace-nowrap`}>
                 {formatGPA(semesterGPA)}
               </div>
             </div>
           </div>
+          {semesterGPA > 0 && (
+            <div className="flex items-start gap-2">
+              <TrendingUp className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0 mt-0.5" />
+              <span className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
+                {gpaClass.class}
+              </span>
+            </div>
+          )}
         </div>
-        
-        {semesterGPA > 0 && (
-          <div className="mt-3 sm:mt-3 flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 sm:h-4 sm:w-4 text-muted-foreground" />
-            <span className="text-sm sm:text-sm text-muted-foreground">
-              {gpaClass.class} - {gpaClass.description}
-            </span>
-          </div>
-        )}
       </CardHeader>
 
-      <CardContent className="p-4 sm:p-6">
+      <CardContent className="p-3 sm:p-4">
         {courses.length === 0 ? (
-          <div className="text-center py-6 sm:py-8">
-            <BookOpen className="h-10 w-10 sm:h-12 sm:w-12 mx-auto text-muted-foreground/50 mb-3 sm:mb-4" />
-            <h3 className="text-base sm:text-lg font-medium text-muted-foreground mb-2">
-              No courses added yet
+          <div className="text-center py-4 sm:py-6">
+            <BookOpen className="h-8 w-8 sm:h-10 sm:w-10 mx-auto text-muted-foreground/50 mb-2 sm:mb-3" />
+            <h3 className="text-sm sm:text-base font-medium text-muted-foreground mb-1">
+              No courses added
             </h3>
-            <p className="text-sm text-muted-foreground">
-              Add courses from the selection below to start tracking your grades.
+            <p className="text-xs sm:text-sm text-muted-foreground px-2">
+              Add courses below to start.
             </p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {courses.map(course => (
               <CourseRow
                 key={course.code}
@@ -106,7 +101,7 @@ const Semester: React.FC<SemesterProps> = ({
           </div>
         )}
 
-        <div className="mt-4 sm:mt-6">
+        <div className="mt-3 sm:mt-4">
           <CourseSelection
             year={year}
             semester={semesterNum}

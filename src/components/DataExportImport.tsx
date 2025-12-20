@@ -46,38 +46,38 @@ const DataExportImport: React.FC<DataExportImportProps> = ({
   };
 
   return (
-    <Card className="border-primary/20 bg-gradient-to-r from-accent/30 to-accent/10">
-      <CardHeader className="pb-3 sm:pb-4">
-        <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-          <Download className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-          Export Academic Report
+    <Card className="border-primary/20 bg-gradient-to-r from-accent/30 to-accent/10 w-full">
+      <CardHeader className="pb-2 sm:pb-3 p-3 sm:p-4">
+        <CardTitle className="text-sm sm:text-base flex items-center gap-2">
+          <Download className="h-4 w-4 text-primary flex-shrink-0" />
+          <span className="whitespace-nowrap">Export Report</span>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3 sm:space-y-4 p-3 sm:p-4 pt-0">
         {/* Export Options */}
-        <div className="space-y-3">
-          <h4 className="font-medium text-sm text-muted-foreground">Export Your Academic Data</h4>
+        <div className="space-y-2 sm:space-y-3">
+          <h4 className="font-medium text-xs sm:text-sm text-muted-foreground">Export Your Data</h4>
           <div className="flex flex-wrap gap-2">
             <Button
               variant="outline"
               size="sm"
               onClick={handleExportPDF}
-              className="flex items-center gap-2 h-10 px-4"
+              className="flex items-center gap-1.5 h-9 sm:h-10 px-3 sm:px-4 text-xs sm:text-sm whitespace-nowrap"
             >
-              <Download className="h-4 w-4" />
-              Export as PDF Report
+              <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              Export PDF
             </Button>
           </div>
-          <p className="text-sm text-muted-foreground">
-            Generate a comprehensive PDF report of your academic progress and GPA.
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            Generate a comprehensive PDF of your academic progress.
           </p>
         </div>
 
         {/* Data Summary */}
-        <div className="border-t pt-4">
-          <h4 className="font-medium text-sm text-muted-foreground mb-2">Current Academic Summary</h4>
-          <div className="flex flex-wrap gap-2">
-            <Badge variant="outline">
+        <div className="border-t pt-3 sm:pt-4">
+          <h4 className="font-medium text-xs sm:text-sm text-muted-foreground mb-2">Summary</h4>
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
+            <Badge variant="outline" className="text-xs">
               {totalCourses} Total Courses
             </Badge>
             <Badge variant="outline">
