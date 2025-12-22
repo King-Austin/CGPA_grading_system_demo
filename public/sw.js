@@ -1,13 +1,8 @@
 // Service Worker for PWA functionality
-const CACHE_NAME = 'gpa-tracker-v1';
+const CACHE_NAME = 'gpa-tracker-v2';
 const urlsToCache = [
   '/',
-  '/static/js/bundle.js',
-  '/static/css/main.css',
-  '/manifest.json',
-  '/favicon.ico',
-  '/icon-192.png',
-  '/icon-512.png'
+  '/manifest.json'
 ];
 
 // Install event - cache resources
