@@ -91,6 +91,35 @@
     <!-- DNS prefetch for external resources -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com" />
     <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+
+    <!-- Fail-safe for "Failed to load module script" errors -->
+    <script>
+      window.addEventListener('error', function(e) {
+        // Detect chunk loading errors (stale hashes) or MIME mismatch from Vercel 404 redirects
+        const isChunkError = e.message && (
+          e.message.includes('MIME type') || 
+          e.message.includes('Loading chunk') || 
+          e.message.includes('Script error')
+        );
+        
+        const isScriptTag = e.target && e.target.tagName === 'SCRIPT';
+        
+        if (isChunkError || isScriptTag) {
+          console.warn('Detected script loading error, attempting fail-safe reload...', e);
+          
+          // Prevent infinite reload loops
+          const lastReload = localStorage.getItem('gpa_fail_safe_reload');
+          const now = Date.now();
+          
+          if (!lastReload || (now - parseInt(lastReload)) > 10000) {
+            localStorage.setItem('gpa_fail_safe_reload', now.toString());
+            window.location.reload();
+          } else {
+            console.error('Multiple loading errors detected. Please check your connection.');
+          }
+        }
+      }, true);
+    </script>
   </head>
 
   <body>
