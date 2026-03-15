@@ -3,6 +3,7 @@ import { Course } from '@/data/courses';
 import YearCard from '@/components/YearCard';
 import CGPACalculator from '@/components/CGPACalculator';
 import DataExportImport from '@/components/DataExportImport';
+import InstallPWA from '@/components/InstallPWA';
 import StickyProgressBar from '@/components/StickyProgressBar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -40,8 +41,15 @@ const Index = () => {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => setStickyVisible(!entry.isIntersecting),
-      { threshold: 0, rootMargin: '-60px 0px 0px 0px' }
+      ([entry]) => {
+        // Once it becomes visible, it stays visible for the rest of the scroll
+        if (!entry.isIntersecting) {
+          setStickyVisible(true);
+        } else {
+          setStickyVisible(false);
+        }
+      },
+      { threshold: 0 }
     );
     if (cgpaCardRef.current) observer.observe(cgpaCardRef.current);
     return () => observer.disconnect();
@@ -137,16 +145,6 @@ const Index = () => {
           <CGPACalculator allSemestersData={semestersData} />
         </div>
 
-        {/* Primary CTA: Download PDF */}
-        <div className="mb-3 animate-slide-in-up" style={{ animationDelay: '150ms' }}>
-          <DataExportImport 
-            variant="cta"
-            semestersData={semestersData} 
-            totalCourses={totalCourses} 
-            totalCompletedCourses={totalCompletedCourses} 
-          />
-        </div>
-
         {/* Academic Years */}
         <div className="space-y-1.5">
           {academicYears.map((year) => {
@@ -172,15 +170,26 @@ const Index = () => {
           })}
         </div>
 
+        {/* Primary CTA: Install & Download - Moved to bottom */}
+        <div className="mt-6 mb-4 space-y-3 animate-slide-in-up">
+          <InstallPWA />
+          <DataExportImport 
+            variant="cta"
+            semestersData={semestersData} 
+            totalCourses={totalCourses} 
+            totalCompletedCourses={totalCompletedCourses} 
+          />
+        </div>
+
         {/* Ultra-minimal Footer */}
         <footer className="mt-4 pb-6 px-2 flex flex-col gap-3 border-t pt-2 border-border/50">
           <div className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-primary/5 border border-primary/10">
             <p className="text-[10px] font-semibold text-primary uppercase tracking-wider flex items-center gap-1">
-              ☕ Buy me a coffee
+              Appreciate the work?
             </p>
             <p className="text-[10px] text-muted-foreground text-center leading-tight">
-              Appreciate the work? Support with an airtime token<br/>
-              <span className="font-bold text-foreground">09134846838</span>
+               Support with a token 
+              <span className="font-bold text-foreground"> 09134846838</span>
             </p>
           </div>
 

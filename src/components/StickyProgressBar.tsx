@@ -1,7 +1,8 @@
 import React from 'react';
-import { formatGPA, getGPAColor, calculateGPA, getGPAClass, CourseWithGrade } from '@/utils/gradeUtils';
+import { formatGPA, calculateGPA, getGPAClass, CourseWithGrade } from '@/utils/gradeUtils';
 import { Badge } from '@/components/ui/badge';
 import { useAnimatedCounter } from '@/hooks/useAnimatedCounter';
+import { GraduationCap } from 'lucide-react';
 
 interface StickyProgressBarProps {
   allSemestersData: Record<string, Record<string, CourseWithGrade & { grade?: string }>>;
@@ -22,51 +23,59 @@ const StickyProgressBar: React.FC<StickyProgressBarProps> = ({ allSemestersData,
   const animatedPct = useAnimatedCounter(pct, 500);
   const animatedCgpa = useAnimatedCounter(cgpa, 500);
 
-  const barColor =
-    cgpa >= 4.5 ? 'bg-emerald-500' :
-    cgpa >= 3.5 ? 'bg-blue-500' :
-    cgpa >= 2.5 ? 'bg-amber-500' :
-    'bg-red-500';
+  const getGradient = (val: number) => {
+    if (val >= 4.5) return 'from-emerald-500 to-green-500';
+    if (val >= 3.5) return 'from-blue-500 to-indigo-500';
+    if (val >= 2.5) return 'from-amber-500 to-orange-500';
+    return 'from-red-500 to-rose-500';
+  };
+
+  const getTextColor = (val: number) => {
+    if (val >= 4.5) return 'text-emerald-600 dark:text-emerald-400';
+    if (val >= 3.5) return 'text-blue-600 dark:text-blue-400';
+    if (val >= 2.5) return 'text-amber-600 dark:text-amber-400';
+    return 'text-red-600 dark:text-red-400';
+  };
 
   return (
     <div
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-        visible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-[100] w-full transition-all duration-500 ${visible
+          ? 'opacity-100 translate-y-0'
+          : 'opacity-0 -translate-y-2 pointer-events-none'
+        }`}
     >
-      <div className="backdrop-blur-md bg-white/80 dark:bg-background/80 border-b border-border shadow-sm px-3 py-2">
-        <div className="max-w-6xl mx-auto flex items-center gap-3 sm:gap-5">
-          {/* CGPA */}
-          <div className="flex items-baseline gap-1 flex-shrink-0">
-            <span className={`text-xl sm:text-2xl font-bold tabular-nums ${getGPAColor(cgpa)}`}>
-              {formatGPA(animatedCgpa)}
-            </span>
-            <span className="text-xs text-muted-foreground hidden sm:inline">CGPA</span>
+      <div className="backdrop-blur-xl bg-background/90 border-b border-border/50 shadow-lg px-2 py-1.5">
+        <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
+          {/* Left: Mini Brand & Class */}
+          <div className="flex items-center gap-2 overflow-hidden">
+            <div className={`p-1 rounded bg-gradient-to-br ${getGradient(cgpa)} text-white shadow-sm`}>
+              <GraduationCap className="h-3 w-3" />
+            </div>
+            <div className="flex flex-col min-w-0">
+              <span className="text-[9px] font-bold text-muted-foreground uppercase leading-none truncate">CGPA Tracker</span>
+              <span className={`text-[10px] font-medium leading-none truncate ${getTextColor(cgpa)}`}>{gpaClass.class}</span>
+            </div>
           </div>
 
-          {/* Class Badge */}
-          <Badge
-            variant="outline"
-            className={`hidden sm:flex text-xs flex-shrink-0 ${
-              cgpa >= 4.5 ? 'border-emerald-500 text-emerald-600' :
-              cgpa >= 3.5 ? 'border-blue-500 text-blue-600' :
-              cgpa >= 2.5 ? 'border-amber-500 text-amber-600' :
-              'border-red-500 text-red-600'
-            }`}
-          >
-            {gpaClass.class}
-          </Badge>
-
-          {/* Progress bar */}
-          <div className="flex-1 flex items-center gap-2">
-            <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
+          {/* Center: Progress & Label */}
+          <div className="flex-1 flex flex-col gap-0.5 max-w-[120px]">
+            <div className="flex justify-between items-center text-[8px] font-bold text-muted-foreground uppercase leading-none">
+              <span>{Math.round(animatedPct)}%</span>
+              <span>{completedCredits}/{totalCredits} CU</span>
+            </div>
+            <div className="w-full h-1 rounded-full bg-muted/50 overflow-hidden">
               <div
-                className={`h-full rounded-full transition-all duration-500 ${barColor}`}
+                className={`h-full rounded-full transition-all duration-700 bg-gradient-to-r ${getGradient(cgpa)}`}
                 style={{ width: `${animatedPct}%` }}
               />
             </div>
-            <span className="text-xs tabular-nums text-muted-foreground whitespace-nowrap flex-shrink-0">
-              {completedCredits}/{totalCredits} CU
+          </div>
+
+          {/* Right: The Metric */}
+          <div className="flex items-center gap-1 bg-muted/30 px-2 py-0.5 rounded-lg border border-border/50">
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">CGPA</span>
+            <span className={`text-xl font-black tabular-nums tracking-tighter ${getTextColor(cgpa)}`}>
+              {formatGPA(animatedCgpa)}
             </span>
           </div>
         </div>

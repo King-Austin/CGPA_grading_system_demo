@@ -78,35 +78,6 @@ const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => 
           </div>
         </div>
 
-        {/* Row 2: Progress & Distribution (Side by Side) */}
-        <div className="grid grid-cols-2 gap-2">
-           <div className="bg-background/60 p-1.5 rounded border border-border/40">
-              <div className="flex justify-between items-center text-[9px] mb-1 font-bold text-muted-foreground uppercase">
-                <span>Progress</span>
-                <span>{Math.round(animatedProgress)}%</span>
-              </div>
-              <Progress value={animatedProgress} className="h-1" />
-           </div>
-           <div className="bg-background/60 p-1.5 rounded border border-border/40 flex flex-col justify-center">
-              <div className="flex h-1.5 rounded-full overflow-hidden gap-[0.5px] items-center">
-                {totalGraded > 0 ? (
-                  DIST_ORDER.filter(g => gradeDistribution[g]).map(g => (
-                    <div 
-                      key={g} 
-                      className={`${DIST_COLORS[g]} h-full`} 
-                      style={{ width: `${(gradeDistribution[g] / totalGraded) * 100}%` }}
-                    />
-                  ))
-                ) : (
-                  <div className="w-full h-full bg-muted" />
-                )}
-              </div>
-              <div className="flex justify-between items-center text-[9px] mt-1 font-bold text-muted-foreground uppercase">
-                <span>Distribution</span>
-                <span>{totalGraded} Graded</span>
-              </div>
-           </div>
-        </div>
       </CardContent>
     </Card>
   );
