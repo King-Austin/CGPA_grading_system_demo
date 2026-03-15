@@ -79,37 +79,26 @@ button, a, [role="button"] {
 @layer base {
   :root {
     /* Core Academic Colors */
-    --background: 220 15% 97%;
-    --foreground: 222 84% 4.9%;
+    --background: 0 0% 98%;
+    --foreground: 222 47% 12%; /* Darker, more contrast */
     
     /* Academic Blue Palette */
-    --primary: 217 91% 59%;
-    --primary-foreground: 0 0% 100%;
-    --primary-light: 217 91% 75%;
-    --primary-dark: 217 91% 45%;
-    
-    /* Success Green for GPA */
-    --success: 142 71% 45%;
-    --success-foreground: 0 0% 100%;
-    --success-light: 142 71% 85%;
-    
-    /* Warning Orange for Low Grades */
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
-    --warning-light: 38 92% 90%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --primary-light: 221.2 83.2% 80%;
     
     /* Card System */
     --card: 0 0% 100%;
-    --card-foreground: 222 84% 4.9%;
-    --card-border: 220 13% 91%;
+    --card-foreground: 222 47% 12%;
+    --card-border: 214.3 31.8% 91.4%;
     
     /* Interactive Elements */
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 222 47% 11%;
-    --muted: 220 14% 96%;
-    --muted-foreground: 215 16% 47%;
-    --accent: 217 91% 95%;
-    --accent-foreground: 217 91% 15%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 38%; /* Darkened for better contrast */
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
     
     /* Form Elements */
     --input: 220 13% 91%;
@@ -158,20 +147,20 @@ button, a, [role="button"] {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 217.2 32.6% 12%; /* Slightly lighter than background */
     --card-foreground: 210 40% 98%;
 
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%; /* Keep vibrant blue in dark mode */
     --primary-foreground: 222.2 47.4% 11.2%;
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
 
     --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted-foreground: 215 20.2% 75%; /* Lighter for better contrast */
 
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
@@ -179,9 +168,9 @@ button, a, [role="button"] {
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 217.2 32.6% 25%; /* More visible border */
+    --input: 217.2 32.6% 25%;
+    --ring: 224.3 76.3% 48%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;

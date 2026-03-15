@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { GraduationCap, RotateCcw, Info } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const LOCAL_STORAGE_KEY = 'gpaTrackerData';
 
@@ -116,14 +117,18 @@ const Index = () => {
               <GraduationCap className="h-4 w-4 text-primary" />
             </div>
             <div>
-              <p className="text-[10px] text-muted-foreground">ECE Department</p>
+              <p className="text-[10px] font-bold text-primary uppercase tracking-wider">ECE Department</p>
+              <p className="text-[8px] text-muted-foreground -mt-0.5 italic">Built by student for students</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <div className="text-[10px] font-medium text-muted-foreground mr-1">
               {totalCompletedCourses}/{totalCourses} Graded
             </div>
-            <DataExportImport semestersData={semestersData} totalCourses={totalCourses} totalCompletedCourses={totalCompletedCourses} />
+            <div className="flex items-center gap-1">
+              <ThemeToggle />
+              <DataExportImport semestersData={semestersData} totalCourses={totalCourses} totalCompletedCourses={totalCompletedCourses} />
+            </div>
           </div>
         </header>
 
@@ -168,16 +173,28 @@ const Index = () => {
         </div>
 
         {/* Ultra-minimal Footer */}
-        <footer className="mt-4 pb-4 px-2 flex items-center justify-between text-[10px] text-muted-foreground border-t pt-2 border-border/50">
-          <div className="flex items-center gap-1">
-            <Info className="h-3 w-3" />
-            <span>Local storage only</span>
+        <footer className="mt-4 pb-6 px-2 flex flex-col gap-3 border-t pt-2 border-border/50">
+          <div className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-primary/5 border border-primary/10">
+            <p className="text-[10px] font-semibold text-primary uppercase tracking-wider flex items-center gap-1">
+              ☕ Buy me a coffee
+            </p>
+            <p className="text-[10px] text-muted-foreground text-center leading-tight">
+              Appreciate the work? Support with an airtime token<br/>
+              <span className="font-bold text-foreground">09134846838</span>
+            </p>
           </div>
-          <div className="flex items-center gap-4">
-            <button onClick={handleResetData} className="text-destructive hover:underline flex items-center gap-1">
-              <RotateCcw className="h-2.5 w-2.5" /> Reset
-            </button>
-            <span>Built by KingAustin</span>
+
+          <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <Info className="h-3 w-3" />
+              <span>Data stored locally in your browser</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <button onClick={handleResetData} className="text-destructive hover:underline flex items-center gap-1">
+                <RotateCcw className="h-2.5 w-2.5" /> Reset
+              </button>
+              <span>Built by KingAustin</span>
+            </div>
           </div>
         </footer>
       </div>

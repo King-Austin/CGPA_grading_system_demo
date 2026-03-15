@@ -18,37 +18,53 @@ const CourseSelection: React.FC<CourseSelectionProps> = ({
 }) => {
   const [selectedCourseCode, setSelectedCourseCode] = useState('');
 
-  const availableCourses = ALL_COURSES.filter(
+  const currentCourses = ALL_COURSES.filter(
     c => c.year === year && c.semester === semester && !semesterCourses.some(sc => sc.code === c.code)
   );
-  const otherCourses = ALL_COURSES.filter(
-    c => (c.year !== year || c.semester !== semester) && !semesterCourses.some(sc => sc.code === c.code)
-  );
+
+  // Get carryovers: same semester, previous years, not already added
+  // Exception: No carryovers for Year 4 Semester 2 (SIWES)
+  const carryoverCourses = (year === 4 && semester === 2) 
+    ? [] 
+    : ALL_COURSES.filter(
+        c => c.year < year && c.semester === semester && !semesterCourses.some(sc => sc.code === c.code)
+      );
+
+  // Group carryovers by year
+  const carryoverByYear = carryoverCourses.reduce((acc, curr) => {
+    if (!acc[curr.year]) acc[curr.year] = [];
+    acc[curr.year].push(curr);
+    return acc;
+  }, {} as Record<number, Course[]>);
+
+  const carryoverYears = Object.keys(carryoverByYear).map(Number).sort((a, b) => b - a); // Newest first
 
   const handleAdd = () => {
     if (!selectedCourseCode) return;
     const course = ALL_COURSES.find(c => c.code === selectedCourseCode);
-    if (course) { onAddCourse(course); setSelectedCourseCode(''); }
+    if (course) {
+      onAddCourse(course);
+      setSelectedCourseCode('');
+    }
   };
 
-  if (availableCourses.length === 0 && otherCourses.length === 0) {
-    return <p className="text-center text-[10px] text-muted-foreground py-1">All courses added ✓</p>;
+  if (currentCourses.length === 0 && carryoverCourses.length === 0) {
+    return <p className="text-center text-[10px] text-muted-foreground py-1">No more eligible courses ✓</p>;
   }
 
   return (
-    // Flat inline row — no card, no header, just select + button
     <div className="flex items-center gap-1.5 pt-1 border-t border-border/30">
       <Select value={selectedCourseCode} onValueChange={setSelectedCourseCode}>
         <SelectTrigger className="flex-1 h-7 text-[11px] px-2 border-border/50">
           <SelectValue placeholder="+ add course…" />
         </SelectTrigger>
         <SelectContent className="max-h-56">
-          {availableCourses.length > 0 && (
+          {currentCourses.length > 0 && (
             <>
-              <div className="px-2 py-0.5 text-[10px] font-medium text-muted-foreground border-b">
-                Year {year} · Sem {semester}
+              <div className="px-2 py-0.5 text-[10px] font-bold text-primary border-b bg-primary/5">
+                Current Level (Year {year} · Sem {semester})
               </div>
-              {availableCourses.map(c => (
+              {currentCourses.map(c => (
                 <SelectItem key={c.code} value={c.code} className="py-1">
                   <span className="text-[11px]">
                     <span className="font-semibold">{c.code}</span>
@@ -59,19 +75,24 @@ const CourseSelection: React.FC<CourseSelectionProps> = ({
               ))}
             </>
           )}
-          {otherCourses.length > 0 && (
+
+          {carryoverYears.length > 0 && (
             <>
-              <div className="px-2 py-0.5 text-[10px] font-medium text-muted-foreground border-b border-t">
-                Other
-              </div>
-              {otherCourses.map(c => (
-                <SelectItem key={c.code} value={c.code} className="py-1">
-                  <span className="text-[11px]">
-                    <span className="font-semibold">{c.code}</span>
-                    <span className="text-muted-foreground ml-1 text-[10px]">Y{c.year}S{c.semester}</span>
-                    <span className="text-muted-foreground ml-1">{c.title}</span>
-                  </span>
-                </SelectItem>
+              {carryoverYears.map(carryYear => (
+                <React.Fragment key={carryYear}>
+                  <div className="px-2 py-0.5 text-[10px] font-bold text-amber-600 border-b border-t mt-1 bg-amber-50/50">
+                    Carryover (Year {carryYear} · Sem {semester})
+                  </div>
+                  {carryoverByYear[carryYear].map(c => (
+                    <SelectItem key={c.code} value={c.code} className="py-1">
+                      <span className="text-[11px]">
+                        <span className="font-semibold text-amber-700">{c.code}</span>
+                        <span className="text-muted-foreground ml-1">{c.title}</span>
+                        <span className="text-muted-foreground ml-1">· {c.creditUnit}CU</span>
+                      </span>
+                    </SelectItem>
+                  ))}
+                </React.Fragment>
               ))}
             </>
           )}
