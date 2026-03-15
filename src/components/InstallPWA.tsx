@@ -23,19 +23,31 @@ const InstallPWA: React.FC = () => {
   const [isStandalone, setIsStandalone] = useState(false);
 
   useEffect(() => {
-    const handler = (e: Event) => {
+    const handler = (e: any) => {
+      // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-      console.log('PWA is ready to be installed via button');
+      // Stash the event so it can be triggered later.
+      setDeferredPrompt(e);
+      console.log('Native Install Prompt captured');
     };
 
     window.addEventListener('beforeinstallprompt', handler);
 
-    if (window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone) {
+    if (window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone === true) {
       setIsStandalone(true);
     }
 
-    return () => window.removeEventListener('beforeinstallprompt', handler);
+    // Also check for appinstalled event to hide button
+    window.addEventListener('appinstalled', () => {
+      setDeferredPrompt(null);
+      setIsStandalone(true);
+      toast.success('App installed successfully!');
+    });
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler);
+      window.removeEventListener('appinstalled', () => {});
+    };
   }, []);
 
   const handleInstallClick = async () => {

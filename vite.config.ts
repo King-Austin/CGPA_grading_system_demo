@@ -15,37 +15,46 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: 'auto',
       devOptions: {
-        enabled: true
+        enabled: true,
+        type: 'module'
       },
-      includeAssets: ['favicon.ico', 'icon-192.svg', 'icon-512.svg'],
+      includeAssets: ['icon-192.svg', 'icon-512.svg', 'robots.txt'],
       manifest: {
-        name: "Scoring Scribe - GPA Tracker",
+        name: "Scoring Scribe - Professional ECE GPA Tracker",
         short_name: "Scoring Scribe",
         description: "Professional ECE GPA calculator with live tracking and PDF export",
         theme_color: "#10b981",
         background_color: "#ffffff",
         display: "standalone",
-        orientation: "portrait-primary",
+        orientation: "portrait",
         scope: "/",
         start_url: "/",
         icons: [
           {
-            src: "/favicon.ico",
-            sizes: "16x16 32x32 48x48",
-            type: "image/x-icon"
+            src: "/icon-192.svg",
+            sizes: "192x192",
+            type: "image/svg+xml",
+            purpose: "any"
           },
           {
             src: "/icon-192.svg",
             sizes: "192x192",
             type: "image/svg+xml",
-            purpose: "any maskable"
+            purpose: "maskable"
           },
           {
             src: "/icon-512.svg",
             sizes: "512x512",
             type: "image/svg+xml",
-            purpose: "any maskable"
+            purpose: "any"
+          },
+          {
+            src: "/icon-512.svg",
+            sizes: "512x512",
+            type: "image/svg+xml",
+            purpose: "maskable"
           }
         ],
         categories: ["education", "productivity", "utilities"],
@@ -54,6 +63,9 @@ export default defineConfig(({ mode }) => ({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,csv}'],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -62,7 +74,7 @@ export default defineConfig(({ mode }) => ({
               cacheName: 'google-fonts-cache',
               expiration: {
                 maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
+                maxAgeSeconds: 60 * 60 * 24 * 365
               },
               cacheableResponse: {
                 statuses: [0, 200]
@@ -76,7 +88,7 @@ export default defineConfig(({ mode }) => ({
               cacheName: 'gstatic-fonts-cache',
               expiration: {
                 maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
+                maxAgeSeconds: 60 * 60 * 24 * 365
               },
               cacheableResponse: {
                 statuses: [0, 200]
