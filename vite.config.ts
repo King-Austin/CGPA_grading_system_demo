@@ -22,11 +22,11 @@ export default defineConfig(({ mode }) => ({
       },
       includeAssets: ['icon-192.svg', 'icon-512.svg', 'robots.txt'],
       manifest: {
-        name: "Scoring Scribe - Professional ECE GPA Tracker",
+        name: "Scoring Scribe | ECE GPA Tracker",
         short_name: "Scoring Scribe",
-        description: "Professional ECE GPA calculator with live tracking and PDF export",
-        theme_color: "#10b981",
-        background_color: "#ffffff",
+        description: "Professional GPA calculator for ECE students. Track semester progress and calculate CGPA with precision.",
+        theme_color: "#2563eb",
+        background_color: "#f8fafc",
         display: "standalone",
         orientation: "portrait",
         scope: "/",
@@ -59,7 +59,23 @@ export default defineConfig(({ mode }) => ({
         ],
         categories: ["education", "productivity", "utilities"],
         lang: "en-US",
-        dir: "ltr"
+        dir: "ltr",
+        shortcuts: [
+          {
+            name: "Calculate GPA",
+            short_name: "GPA",
+            description: "Go straight to GPA calculator",
+            url: "/",
+            icons: [{ src: "/icon-192.svg", sizes: "192x192" }]
+          },
+          {
+            name: "Export Data",
+            short_name: "Export",
+            description: "Export/Import academic data",
+            url: "/?action=export",
+            icons: [{ src: "/icon-192.svg", sizes: "192x192" }]
+          }
+        ]
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,csv}'],

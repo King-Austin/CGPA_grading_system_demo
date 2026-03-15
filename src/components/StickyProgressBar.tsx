@@ -23,11 +23,11 @@ const StickyProgressBar: React.FC<StickyProgressBarProps> = ({ allSemestersData,
   const animatedPct = useAnimatedCounter(pct, 500);
   const animatedCgpa = useAnimatedCounter(cgpa, 500);
 
-  const getGradient = (val: number) => {
-    if (val >= 4.5) return 'from-emerald-500 to-green-500';
-    if (val >= 3.5) return 'from-blue-500 to-indigo-500';
-    if (val >= 2.5) return 'from-amber-500 to-orange-500';
-    return 'from-red-500 to-rose-500';
+  const getSolidColor = (val: number) => {
+    if (val >= 4.5) return 'bg-emerald-600';
+    if (val >= 3.5) return 'bg-blue-600';
+    if (val >= 2.5) return 'bg-amber-600';
+    return 'bg-red-600';
   };
 
   const getTextColor = (val: number) => {
@@ -48,7 +48,7 @@ const StickyProgressBar: React.FC<StickyProgressBarProps> = ({ allSemestersData,
         <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
           {/* Left: Mini Brand & Class */}
           <div className="flex items-center gap-2 overflow-hidden">
-            <div className={`p-1 rounded bg-gradient-to-br ${getGradient(cgpa)} text-white shadow-sm`}>
+            <div className={`p-1 rounded ${getSolidColor(cgpa)} text-white shadow-sm`}>
               <GraduationCap className="h-3 w-3" />
             </div>
             <div className="flex flex-col min-w-0">
@@ -65,7 +65,7 @@ const StickyProgressBar: React.FC<StickyProgressBarProps> = ({ allSemestersData,
             </div>
             <div className="w-full h-1 rounded-full bg-muted/50 overflow-hidden">
               <div
-                className={`h-full rounded-full transition-all duration-700 bg-gradient-to-r ${getGradient(cgpa)}`}
+                className={`h-full rounded-full transition-all duration-700 ${getSolidColor(cgpa)}`}
                 style={{ width: `${animatedPct}%` }}
               />
             </div>

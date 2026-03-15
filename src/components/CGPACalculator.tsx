@@ -48,11 +48,11 @@ const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => 
     return <BookCheck {...props} />;
   };
 
-  const getGradient = (gpa: number) => {
-    if (gpa >= 4.5) return 'from-emerald-500 to-green-500';
-    if (gpa >= 3.5) return 'from-blue-500 to-indigo-500';
-    if (gpa >= 2.5) return 'from-amber-500 to-orange-500';
-    return 'from-red-500 to-rose-500';
+  const getSolidColor = (gpa: number) => {
+    if (gpa >= 4.5) return 'bg-emerald-600';
+    if (gpa >= 3.5) return 'bg-blue-600';
+    if (gpa >= 2.5) return 'bg-amber-600';
+    return 'bg-red-600';
   };
 
   const DIST_ORDER = ['A','B','C','D','E','F'];
@@ -63,7 +63,7 @@ const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => 
     <Card className="overflow-hidden border-none shadow-none bg-muted/20">
       <CardContent className="p-2 space-y-2">
         {/* Row 1: CGPA Big Info */}
-        <div className={`flex items-center justify-between p-2 rounded-md bg-gradient-to-r ${getGradient(cgpa)} text-white`}>
+        <div className={`flex items-center justify-between p-2 rounded-md ${getSolidColor(cgpa)} text-white`}>
           <div className="flex items-center gap-2">
              <div className="p-1.5 rounded-full bg-white/20">
                {getClassIcon(gpaClass.class)}

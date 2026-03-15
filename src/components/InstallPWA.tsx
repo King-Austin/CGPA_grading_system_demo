@@ -21,32 +21,34 @@ interface BeforeInstallPromptEvent extends Event {
 const InstallPWA: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isStandalone, setIsStandalone] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
     const handler = (e: any) => {
-      // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
-      // Stash the event so it can be triggered later.
       setDeferredPrompt(e);
-      console.log('Native Install Prompt captured');
     };
 
     window.addEventListener('beforeinstallprompt', handler);
 
+    // Detect standalone mode
     if (window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone === true) {
       setIsStandalone(true);
     }
 
-    // Also check for appinstalled event to hide button
+    // Detect iOS
+    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+    setIsIOS(ios);
+
     window.addEventListener('appinstalled', () => {
       setDeferredPrompt(null);
       setIsStandalone(true);
-      toast.success('App installed successfully!');
+      toast.success('Professional app installed successfully!');
     });
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handler);
-      window.removeEventListener('appinstalled', () => {});
+      window.removeEventListener('appinstalled', () => { });
     };
   }, []);
 
@@ -58,39 +60,46 @@ const InstallPWA: React.FC = () => {
         toast.success('Installing Scoring Scribe...');
         setDeferredPrompt(null);
       }
+    } else if (isIOS) {
+      toast.info(
+        "To Install: Tap the 'Share' icon and choose 'Add to Home Screen'.",
+        { duration: 5000 }
+      );
     } else {
-      // Fallback for iOS or browsers that don't support beforeinstallprompt
-      toast.info('To install: Tap the browser menu/share button and select "Add to Home Screen".');
+      toast.info('Install via your browser menu (Add to home screen).');
     }
   };
 
   if (isStandalone) return null;
 
   return (
-    <div className="w-full group">
+    <div className="w-full group px-1">
       <Button
         onClick={handleInstallClick}
-        className="w-full bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 font-bold py-6 rounded-xl transition-all flex items-center justify-center gap-2"
+        variant="default"
+        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm font-bold py-5 rounded-lg transition-all flex items-center justify-between px-4"
       >
-        <div className="bg-primary/20 p-1.5 rounded-lg group-hover:scale-110 transition-transform">
-          <Smartphone className="h-5 w-5" />
+        <div className="flex items-center gap-3">
+          <div className="bg-white/20 p-1.5 rounded-md shadow-inner">
+            <Smartphone className="h-4 w-4" />
+          </div>
+          <div className="flex flex-col items-start leading-none text-left">
+            <span className="text-xs">Install </span>
+            <span className="text-[9px] opacity-70 font-normal mt-0.5">Fast, offline-ready academic tool</span>
+          </div>
         </div>
-        <div className="flex flex-col items-start leading-tight">
-          <span className="text-sm">Install App</span>
-          <span className="text-[10px] opacity-80 font-normal">Fast offline access from home screen</span>
-        </div>
-        <div className="ml-auto flex items-center gap-2">
-           <TooltipProvider>
-             <Tooltip>
-               <TooltipTrigger asChild>
-                 <Info className="h-4 w-4 opacity-40 hover:opacity-100 transition-opacity" />
-               </TooltipTrigger>
-               <TooltipContent className="max-w-[200px] text-[10px]">
-                 Installing turns this site into an app that works without internet.
-               </TooltipContent>
-             </Tooltip>
-           </TooltipProvider>
-           <Download className="h-4 w-4 opacity-50" />
+        <div className="flex items-center gap-2">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info className="h-3.5 w-3.5 opacity-60 hover:opacity-100 transition-opacity" />
+              </TooltipTrigger>
+              <TooltipContent className="max-w-[180px] text-[10px] bg-card text-card-foreground border-border">
+                Turns this site into a real app on your home screen or desktop.
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <Download className="h-4 w-4" />
         </div>
       </Button>
     </div>
