@@ -1,9 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Course } from '@/data/courses';
 import { GRADE_SCALE } from '@/utils/gradeUtils';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { Trash2 } from 'lucide-react';
 
 interface CourseRowProps {
@@ -13,81 +10,94 @@ interface CourseRowProps {
   onRemoveCourse: (courseCode: string) => void;
 }
 
-const CourseRow: React.FC<CourseRowProps> = ({
-  course,
-  grade,
-  onGradeChange,
-  onRemoveCourse,
-}) => {
-  const getCategoryColor = (category?: string) => {
-    switch (category) {
-      case 'core':
-        return 'bg-primary/10 text-primary border-primary/20';
-      case 'elective':
-        return 'bg-warning/10 text-warning border-warning/20';
-      case 'faculty':
-        return 'bg-success/10 text-success border-success/20';
-      default:
-        return 'bg-muted text-muted-foreground';
-    }
+const GRADE_COLORS: Record<string, { bg: string; text: string; border: string; stripe: string }> = {
+  A: { bg: 'bg-emerald-500', text: 'text-white', border: 'border-emerald-500', stripe: 'border-l-emerald-500' },
+  B: { bg: 'bg-green-400',   text: 'text-white', border: 'border-green-400',   stripe: 'border-l-green-400' },
+  C: { bg: 'bg-amber-400',   text: 'text-white', border: 'border-amber-400',   stripe: 'border-l-amber-400' },
+  D: { bg: 'bg-orange-400',  text: 'text-white', border: 'border-orange-400',  stripe: 'border-l-orange-400' },
+  E: { bg: 'bg-orange-500',  text: 'text-white', border: 'border-orange-500',  stripe: 'border-l-orange-500' },
+  F: { bg: 'bg-red-500',     text: 'text-white', border: 'border-red-500',     stripe: 'border-l-red-500' },
+};
+
+const INACTIVE_HOVER: Record<string, string> = {
+  A: 'hover:bg-emerald-50 hover:border-emerald-400 hover:text-emerald-600',
+  B: 'hover:bg-green-50 hover:border-green-400 hover:text-green-600',
+  C: 'hover:bg-amber-50 hover:border-amber-400 hover:text-amber-600',
+  D: 'hover:bg-orange-50 hover:border-orange-400 hover:text-orange-600',
+  E: 'hover:bg-orange-50 hover:border-orange-500 hover:text-orange-600',
+  F: 'hover:bg-red-50 hover:border-red-400 hover:text-red-600',
+};
+
+const CAT_DOT: Record<string, string> = {
+  faculty: 'bg-blue-400',
+  gss: 'bg-emerald-400',
+  elective: 'bg-amber-400',
+};
+
+const CourseRow: React.FC<CourseRowProps> = ({ course, grade, onGradeChange, onRemoveCourse }) => {
+  const [bounceKey, setBounceKey] = useState(0);
+
+  const handleGradeClick = (letter: string) => {
+    onGradeChange(course.code, letter);
+    setBounceKey(k => k + 1);
   };
 
-  const getGradeColor = (gradeValue?: string) => {
-    if (!gradeValue) return '';
-    const points = GRADE_SCALE.find(g => g.letter === gradeValue)?.points || 0;
-    if (points >= 4) return 'text-success';
-    if (points >= 3) return 'text-primary';
-    if (points >= 2) return 'text-warning';
-    return 'text-destructive';
-  };
+  const stripeColor = grade ? GRADE_COLORS[grade]?.stripe : 'border-l-transparent';
 
   return (
-    <div className="group flex flex-col gap-2 p-3 sm:p-4 rounded-lg border border-card-border bg-card hover:shadow-md transition-all duration-200 w-full">
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-center gap-1.5 mb-1">
-            <h4 className="font-semibold text-card-foreground text-sm sm:text-base">{course.code}</h4>
-            <Badge variant="outline" className={`${getCategoryColor(course.category)} text-xs flex-shrink-0`}>
-              {course.category || 'core'}
-            </Badge>
-          </div>
-          <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{course.title}</p>
-        </div>
-        <Badge variant="outline" className="text-xs font-semibold flex-shrink-0">
-          {course.creditUnit} CU
-        </Badge>
-      </div>
-      
-      <div className="flex items-center gap-2 w-full">
-        <div className="flex-1">
-          <Select value={grade || ''} onValueChange={(value) => onGradeChange(course.code, value)}>
-            <SelectTrigger className="h-10 text-xs sm:text-sm w-full">
-              <SelectValue placeholder="Select Grade" />
-            </SelectTrigger>
-            <SelectContent>
-              {GRADE_SCALE.map((gradeOption) => (
-                <SelectItem 
-                  key={gradeOption.letter} 
-                  value={gradeOption.letter}
-                  className="text-xs sm:text-sm"
-                >
-                  <span className={getGradeColor(gradeOption.letter)}>
-                    {gradeOption.letter} ({gradeOption.points})
-                  </span>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        
-        <Button
-          variant="outline"
-          size="sm"
+    // Single-line layout: everything on one row
+    <div
+      className={`flex flex-col gap-1 p-1 rounded-md border-l-[3px] border border-border/50
+        bg-card hover:bg-accent/10 transition-colors duration-150 animate-slide-in-up ${stripeColor}`}
+    >
+      {/* Line 1: Actions & Meta */}
+      <div className="flex items-center gap-1.5 min-w-0">
+        <button
           onClick={() => onRemoveCourse(course.code)}
-          className="h-10 w-10 p-0 flex-shrink-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
+          className="h-6 w-6 flex-shrink-0 flex items-center justify-center rounded
+            bg-red-50 text-red-500 border border-red-100 dark:bg-red-950/30 dark:border-red-900/50"
+          title="Remove course"
         >
-          <Trash2 className="h-4 w-4" />
-        </Button>
+          <Trash2 className="h-3 w-3" />
+        </button>
+
+        <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${CAT_DOT[course.category ?? ''] ?? 'bg-muted-foreground/30'}`} />
+
+        <span className="font-bold text-[10px] sm:text-[11px] text-card-foreground flex-shrink-0 tabular-nums">
+          {course.code}
+        </span>
+
+        <span className="text-[10px] text-muted-foreground truncate flex-1 min-w-0">
+          {course.title}
+        </span>
+
+        <span className="text-[10px] text-muted-foreground/60 flex-shrink-0 tabular-nums font-medium">
+          {course.creditUnit}CU
+        </span>
+      </div>
+
+      {/* Line 2: Grade Pills — horizontal scroll allowed if necessary, but compact */}
+      <div className="flex items-center gap-[2px] overflow-x-auto no-scrollbar pb-0.5">
+        {GRADE_SCALE.map((g) => {
+          const isActive = grade === g.letter;
+          const colors = GRADE_COLORS[g.letter];
+          return (
+            <button
+              {...(isActive ? { key: `${g.letter}-${bounceKey}` } : { key: g.letter })}
+              onClick={() => handleGradeClick(g.letter)}
+              title={`${g.letter} — ${g.description} (${g.points} pts)`}
+              className={`
+                h-6 min-w-[32px] flex-1 rounded text-[10px] font-bold border transition-all duration-150
+                ${isActive
+                  ? `${colors.bg} ${colors.text} ${colors.border} animate-pop-bounce`
+                  : `bg-background text-muted-foreground/60 border-border/50 ${INACTIVE_HOVER[g.letter]}`
+                }
+              `}
+            >
+              {g.letter}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

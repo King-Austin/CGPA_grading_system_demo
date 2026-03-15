@@ -1,11 +1,11 @@
 {
-  "name": "Course Score Scribe - GPA Tracker",
-  "short_name": "GPA Tracker",
-  "description": "Track your academic progress with live GPA calculations and comprehensive grade management",
+  "name": "Scoring Scribe - GPA Tracker",
+  "short_name": "Scoring Scribe",
+  "description": "Professional ECE GPA calculator with live tracking and PDF export",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#3b82f6",
+  "theme_color": "#10b981",
   "orientation": "portrait-primary",
   "scope": "/",
   "icons": [

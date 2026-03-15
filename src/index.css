@@ -2,6 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ───────────── Custom Animations ───────────── */
+@keyframes slide-in-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pop-bounce {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.28); }
+  60%  { transform: scale(0.93); }
+  80%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@keyframes stagger-fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pill-press {
+  0%   { transform: scale(1.05); }
+  50%  { transform: scale(0.94); }
+  100% { transform: scale(1.05); }
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-pop-bounce {
+  animation: pop-bounce 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-stagger-fade-up {
+  animation: stagger-fade-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Reduced-motion: disable all custom animations */
+@media (prefers-reduced-motion: reduce) {
+  .animate-slide-in-up,
+  .animate-pop-bounce,
+  .animate-stagger-fade-up {
+    animation: none;
+  }
+}
+
 /* Modern Academic Theme Design System - All colors must be HSL */
 
 /* Mobile-friendly base styles */
@@ -25,10 +71,9 @@ body {
   max-width: 100%;
 }
 
-/* Better touch targets for mobile */
+/* Base tap targets for accessibility where not overridden */
 button, a, [role="button"] {
-  min-height: 44px;
-  min-width: 44px;
+  @apply focus-visible:ring-2 focus-visible:ring-offset-1;
 }
 
 @layer base {
@@ -157,33 +202,19 @@ button, a, [role="button"] {
     @apply bg-background text-foreground;
   }
   
-  /* Mobile-first optimizations */
-  @media (max-width: 640px) {
-    /* Ensure minimum touch target sizes */
-    button, [role="button"], select, input {
-      min-height: 44px;
-    }
-    
-    /* Optimize tap targets spacing */
-    .tap-target {
-      min-height: 44px;
-      min-width: 44px;
-    }
-    
-    /* Prevent horizontal scrolling */
-    html, body {
-      overflow-x: hidden;
-    }
-  }
-  
-  /* Smooth scrolling for better mobile experience */
-  html {
-    scroll-behavior: smooth;
-  }
-  
   /* Better focus states for accessibility */
   :focus-visible {
     outline: 2px solid hsl(var(--ring));
     outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

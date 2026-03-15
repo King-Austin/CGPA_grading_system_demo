@@ -1,138 +1,112 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { calculateGPA, formatGPA, getGPAClass, getGPAColor, CourseWithGrade } from '@/utils/gradeUtils';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Trophy, Target, BookCheck, Award } from 'lucide-react';
+import { useAnimatedCounter } from '@/hooks/useAnimatedCounter';
+import confetti from 'canvas-confetti';
 
 interface CGPACalculatorProps {
   allSemestersData: Record<string, Record<string, CourseWithGrade & { grade?: string }>>;
 }
 
 const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => {
-  // Flatten all courses from all semesters
   const allCourses: CourseWithGrade[] = Object.values(allSemestersData)
-    .flatMap(semester => Object.values(semester))
-    .map(course => ({
-      code: course.code,
-      title: course.title,
-      creditUnit: course.creditUnit,
-      grade: course.grade,
-    }));
+    .flatMap(sem => Object.values(sem))
+    .map(c => ({ code: c.code, title: c.title, creditUnit: c.creditUnit, grade: c.grade }));
 
   const cgpa = calculateGPA(allCourses);
+  const animatedCgpa = useAnimatedCounter(cgpa, 650);
   const gpaClass = getGPAClass(cgpa);
-  
-  const totalCredits = allCourses.reduce((sum, course) => sum + course.creditUnit, 0);
-  const completedCredits = allCourses.filter(course => course.grade).reduce((sum, course) => sum + course.creditUnit, 0);
-  const progressPercentage = totalCredits > 0 ? (completedCredits / totalCredits) * 100 : 0;
 
-  // Calculate grade distribution
-  const gradeDistribution = allCourses
-    .filter(course => course.grade)
-    .reduce((acc, course) => {
-      const grade = course.grade!;
-      acc[grade] = (acc[grade] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+  const wasFirstClass = useRef(false);
+  useEffect(() => {
+    const isFirstClass = cgpa >= 4.5;
+    if (isFirstClass && !wasFirstClass.current) {
+      const fire = (x: number) => confetti({ particleCount: 60, spread: 50, origin: { x, y: 0.8 }, zIndex: 9999 });
+      fire(0.3); setTimeout(() => fire(0.7), 150);
+    }
+    wasFirstClass.current = isFirstClass;
+  }, [cgpa]);
 
-  const getClassIcon = (className: string) => {
-    if (className.includes('First')) return <Trophy className="h-5 w-5" />;
-    if (className.includes('Second Class Upper')) return <Award className="h-5 w-5" />;
-    if (className.includes('Second Class Lower')) return <Target className="h-5 w-5" />;
-    return <BookCheck className="h-5 w-5" />;
+  const totalCredits = allCourses.reduce((s, c) => s + c.creditUnit, 0);
+  const completedCredits = allCourses.filter(c => c.grade).reduce((s, c) => s + c.creditUnit, 0);
+  const progressPct = totalCredits > 0 ? (completedCredits / totalCredits) * 100 : 0;
+  const animatedProgress = useAnimatedCounter(progressPct, 600);
+
+  const gradeDistribution = allCourses.filter(c => c.grade).reduce((acc, c) => {
+    const g = c.grade!;
+    acc[g] = (acc[g] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const getClassIcon = (cls: string) => {
+    const props = { className: "h-3 w-3" };
+    if (cls.includes('First')) return <Trophy {...props} />;
+    if (cls.includes('Upper')) return <Award {...props} />;
+    if (cls.includes('Lower')) return <Target {...props} />;
+    return <BookCheck {...props} />;
   };
 
-  const getClassGradient = (gpa: number) => {
-    if (gpa >= 4.5) return 'bg-gradient-to-r from-success to-success-light';
-    if (gpa >= 3.5) return 'bg-gradient-to-r from-primary to-primary-light';
-    if (gpa >= 2.5) return 'bg-gradient-to-r from-warning to-warning-light';
-    return 'bg-gradient-to-r from-destructive to-destructive';
+  const getGradient = (gpa: number) => {
+    if (gpa >= 4.5) return 'from-emerald-500 to-green-500';
+    if (gpa >= 3.5) return 'from-blue-500 to-indigo-500';
+    if (gpa >= 2.5) return 'from-amber-500 to-orange-500';
+    return 'from-red-500 to-rose-500';
   };
+
+  const DIST_ORDER = ['A','B','C','D','E','F'];
+  const DIST_COLORS: Record<string,string> = { A:'bg-emerald-500',B:'bg-green-400',C:'bg-amber-400',D:'bg-orange-400',E:'bg-orange-500',F:'bg-red-500' };
+  const totalGraded = Object.values(gradeDistribution).reduce((a,b) => a+b, 0);
 
   return (
-    <Card className="overflow-hidden shadow-xl border-2 border-primary/20 w-full">
-      <CardHeader className={`text-white ${getClassGradient(cgpa)}`}>
-        <CardTitle className="text-sm sm:text-2xl font-bold flex items-center gap-2">
-          <span className="flex-shrink-0">{getClassIcon(gpaClass.class)}</span>
-          <span className="line-clamp-2 leading-tight">CGPA Calculator</span>
-        </CardTitle>
-      </CardHeader>
-
-      <CardContent className="p-3 sm:p-6">
-        <div className="flex flex-col md:grid md:grid-cols-2 gap-4 sm:gap-6">
-          {/* CGPA Display */}
-          <div className="space-y-3 sm:space-y-4">
-            <div className="text-center">
-              <div className={`text-4xl sm:text-5xl lg:text-6xl font-bold ${getGPAColor(cgpa)} mb-2`}>
-                {formatGPA(cgpa)}
-              </div>
-              <Badge 
-                variant="outline" 
-                className={`text-xs sm:text-base px-2 sm:px-4 py-1 sm:py-2 ${
-                  cgpa >= 4.5 ? 'border-success text-success' :
-                  cgpa >= 3.5 ? 'border-primary text-primary' :
-                  cgpa >= 2.5 ? 'border-warning text-warning' :
-                  'border-destructive text-destructive'
-                }`}
-              >
-                {gpaClass.class}
-              </Badge>
-              <p className="text-xs sm:text-sm text-muted-foreground mt-2 px-2 line-clamp-2">{gpaClass.description}</p>
-            </div>
-
-            {/* Progress */}
-            <div className="space-y-2">
-              <div className="flex justify-between text-xs sm:text-sm gap-2">
-                <span className="text-muted-foreground whitespace-nowrap">Progress</span>
-                <span className="font-medium whitespace-nowrap">{completedCredits}/{totalCredits} Credits</span>
-              </div>
-              <Progress value={progressPercentage} className="h-2" />
-              <p className="text-xs sm:text-sm text-muted-foreground text-center">
-                {Math.round(progressPercentage)}% completed
-              </p>
-            </div>
+    <Card className="overflow-hidden border-none shadow-none bg-muted/20">
+      <CardContent className="p-2 space-y-2">
+        {/* Row 1: CGPA Big Info */}
+        <div className={`flex items-center justify-between p-2 rounded-md bg-gradient-to-r ${getGradient(cgpa)} text-white`}>
+          <div className="flex items-center gap-2">
+             <div className="p-1.5 rounded-full bg-white/20">
+               {getClassIcon(gpaClass.class)}
+             </div>
+             <div>
+               <div className="text-[10px] font-bold opacity-80 leading-none mb-0.5 uppercase tracking-tighter">Your CGPA</div>
+               <div className="text-xs font-medium leading-none opacity-90">{gpaClass.class}</div>
+             </div>
           </div>
-
-          {/* Statistics */}
-          <div className="space-y-3 sm:space-y-4">
-            <h3 className="font-semibold text-card-foreground text-sm sm:text-base mb-2">Statistics</h3>
-            
-            <div className="grid grid-cols-2 gap-2 sm:gap-4">
-              <div className="bg-muted/50 rounded-lg p-2 sm:p-3 text-center">
-                <div className="text-base sm:text-lg font-bold text-card-foreground">{allCourses.length}</div>
-                <div className="text-xs text-muted-foreground whitespace-nowrap">Courses</div>
-              </div>
-              <div className="bg-muted/50 rounded-lg p-2 sm:p-3 text-center">
-                <div className="text-base sm:text-lg font-bold text-card-foreground">
-                  {allCourses.filter(c => c.grade).length}
-                </div>
-                <div className="text-xs text-muted-foreground whitespace-nowrap">Graded</div>
-              </div>
-            </div>
-
-            {/* Grade Distribution */}
-            {Object.keys(gradeDistribution).length > 0 && (
-              <div>
-                <h4 className="text-xs sm:text-sm font-medium text-muted-foreground mb-2">Grade Distribution</h4>
-                <div className="flex flex-wrap gap-1.5">
-                  {Object.entries(gradeDistribution).map(([grade, count]) => (
-                    <Badge key={grade} variant="outline" className="text-xs">
-                      {grade}: {count}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            )}
+          <div className="text-3xl font-black tabular-nums tracking-tighter">
+            {formatGPA(animatedCgpa)}
           </div>
         </div>
 
-        {cgpa === 0 && (
-          <div className="text-center py-4 sm:py-6 text-muted-foreground">
-            <BookCheck className="h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-2 opacity-50" />
-            <p className="text-xs sm:text-sm px-2">Start adding grades to see your CGPA.</p>
-          </div>
-        )}
+        {/* Row 2: Progress & Distribution (Side by Side) */}
+        <div className="grid grid-cols-2 gap-2">
+           <div className="bg-background/60 p-1.5 rounded border border-border/40">
+              <div className="flex justify-between items-center text-[9px] mb-1 font-bold text-muted-foreground uppercase">
+                <span>Progress</span>
+                <span>{Math.round(animatedProgress)}%</span>
+              </div>
+              <Progress value={animatedProgress} className="h-1" />
+           </div>
+           <div className="bg-background/60 p-1.5 rounded border border-border/40 flex flex-col justify-center">
+              <div className="flex h-1.5 rounded-full overflow-hidden gap-[0.5px] items-center">
+                {totalGraded > 0 ? (
+                  DIST_ORDER.filter(g => gradeDistribution[g]).map(g => (
+                    <div 
+                      key={g} 
+                      className={`${DIST_COLORS[g]} h-full`} 
+                      style={{ width: `${(gradeDistribution[g] / totalGraded) * 100}%` }}
+                    />
+                  ))
+                ) : (
+                  <div className="w-full h-full bg-muted" />
+                )}
+              </div>
+              <div className="flex justify-between items-center text-[9px] mt-1 font-bold text-muted-foreground uppercase">
+                <span>Distribution</span>
+                <span>{totalGraded} Graded</span>
+              </div>
+           </div>
+        </div>
       </CardContent>
     </Card>
   );

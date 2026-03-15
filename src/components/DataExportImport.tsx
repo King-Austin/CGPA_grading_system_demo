@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import {
   Dialog,
@@ -11,7 +9,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { Download } from 'lucide-react';
+import { FileDown, ArrowRight } from 'lucide-react';
 import { exportGPAReportAsPDF, ExportData } from '@/utils/dataExport';
 import { calculateGPA } from '@/utils/gradeUtils';
 
@@ -19,18 +17,19 @@ interface DataExportImportProps {
   semestersData: Record<string, Record<string, any>>;
   totalCourses: number;
   totalCompletedCourses: number;
+  variant?: 'minimal' | 'cta';
 }
 
 const DataExportImport: React.FC<DataExportImportProps> = ({
   semestersData,
   totalCourses,
   totalCompletedCourses,
+  variant = 'minimal',
 }) => {
   const [showNameDialog, setShowNameDialog] = useState(false);
   const [studentName, setStudentName] = useState('');
   const [isExporting, setIsExporting] = useState(false);
 
-  // Calculate CGPA for export
   const allCourses = Object.values(semestersData).flatMap(semester =>
     Object.values(semester).map(course => ({
       code: course.code,
@@ -50,127 +49,115 @@ const DataExportImport: React.FC<DataExportImportProps> = ({
     version: '1.0.0',
   };
 
-  const handleExportClick = () => {
-    setShowNameDialog(true);
-  };
-
   const handleConfirmExport = async () => {
-    if (!studentName.trim()) {
-      alert('Please enter your name');
-      return;
-    }
-    
+    if (!studentName.trim()) return;
     setIsExporting(true);
     try {
       await exportGPAReportAsPDF(exportData, studentName.trim());
       setStudentName('');
       setShowNameDialog(false);
     } catch (error) {
-      console.error('PDF export failed:', error);
-      alert('Failed to export PDF. Please try again.');
-    } finally {
-      setIsExporting(false);
-    }
+       console.error('PDF export failed:', error);
+    } finally { setIsExporting(false); }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleConfirmExport();
-    }
-  };
+  if (variant === 'cta') {
+    return (
+      <>
+        <Button
+          onClick={() => setShowNameDialog(true)}
+          disabled={isExporting}
+          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-6 rounded-xl shadow-lg shadow-emerald-200 dark:shadow-none transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
+        >
+          <div className="bg-white/20 p-1.5 rounded-lg">
+            <FileDown className="h-5 w-5" />
+          </div>
+          <div className="flex flex-col items-start leading-tight">
+            <span className="text-sm">Download Academic Report</span>
+            <span className="text-[10px] opacity-80 font-normal">Generate PDF for {totalCompletedCourses}/{totalCourses} courses</span>
+          </div>
+          <ArrowRight className="h-4 w-4 ml-auto opacity-50" />
+        </Button>
+
+        {/* Dialog reuse */}
+        <Dialog open={showNameDialog} onOpenChange={setShowNameDialog}>
+          <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-md rounded-xl p-6">
+            <DialogHeader>
+              <DialogTitle className="text-lg">Generate PDF Report</DialogTitle>
+              <DialogDescription className="text-sm">
+                Enter your full name as you want it to appear on the official report.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-4">
+              <Input
+                placeholder="Full Name (e.g. King Austin)"
+                value={studentName}
+                onChange={(e) => setStudentName(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleConfirmExport()}
+                autoFocus
+                className="h-12 text-base border-2 focus-visible:ring-emerald-500"
+              />
+            </div>
+            <DialogFooter className="flex-col sm:flex-row gap-2">
+              <Button variant="ghost" className="h-12" onClick={() => setShowNameDialog(false)}>
+                Cancel
+              </Button>
+              <Button
+                className="h-12 px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-bold"
+                onClick={handleConfirmExport}
+                disabled={!studentName.trim() || isExporting}
+              >
+                {isExporting ? 'Generating...' : 'Download Now'}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </>
+    );
+  }
 
   return (
     <>
-      <Card className="border-primary/20 bg-gradient-to-r from-accent/30 to-accent/10 w-full">
-        <CardHeader className="pb-2 sm:pb-3 p-3 sm:p-4">
-          <CardTitle className="text-sm sm:text-base flex items-center gap-2">
-            <Download className="h-4 w-4 text-primary flex-shrink-0" />
-            <span className="whitespace-nowrap">Export Report</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3 sm:space-y-4 p-3 sm:p-4 pt-0">
-          {/* Export Options */}
-          <div className="space-y-2 sm:space-y-3">
-            <h4 className="font-medium text-xs sm:text-sm text-muted-foreground">Export Your Data</h4>
-            <div className="flex flex-wrap gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleExportClick}
-                disabled={isExporting}
-                className="flex items-center gap-1.5 h-9 sm:h-10 px-3 sm:px-4 text-xs sm:text-sm whitespace-nowrap"
-              >
-                <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                {isExporting ? 'Exporting...' : 'Export PDF'}
-              </Button>
-            </div>
-            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-              Generate a professional PDF report with your academic record and grades.
-            </p>
-          </div>
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => setShowNameDialog(true)}
+        disabled={isExporting}
+        className="h-7 px-2 text-[10px] font-bold text-primary hover:bg-primary/10 whitespace-nowrap"
+      >
+        <FileDown className="h-3 w-3 mr-1" />
+        {isExporting ? 'Exporting...' : 'PDF'}
+      </Button>
 
-          {/* Data Summary */}
-          <div className="border-t pt-3 sm:pt-4">
-            <h4 className="font-medium text-xs sm:text-sm text-muted-foreground mb-2">Summary</h4>
-            <div className="flex flex-wrap gap-1.5 sm:gap-2">
-              <Badge variant="outline" className="text-xs">
-                {totalCourses} Total Courses
-              </Badge>
-              <Badge variant="outline" className="text-xs">
-                {totalCompletedCourses} Graded
-              </Badge>
-              <Badge variant="outline" className="text-xs">
-                CGPA: {cgpa.toFixed(2)}
-              </Badge>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Student Name Dialog */}
       <Dialog open={showNameDialog} onOpenChange={setShowNameDialog}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-md rounded-lg p-4">
           <DialogHeader>
-            <DialogTitle>Export Academic Report</DialogTitle>
-            <DialogDescription>
-              Please enter your name to include in the PDF report.
+            <DialogTitle className="text-sm">Export Report</DialogTitle>
+            <DialogDescription className="text-xs">
+              Enter your name for the PDF report.
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium text-card-foreground mb-2 block">
-                Full Name
-              </label>
-              <Input
-                placeholder="Enter your full name"
-                value={studentName}
-                onChange={(e) => setStudentName(e.target.value)}
-                onKeyPress={handleKeyPress}
-                autoFocus
-                className="h-10"
-              />
-              <p className="text-xs text-muted-foreground mt-2">
-                This will appear on your official academic grade report from the Department of Electronics and Computer Engineering.
-              </p>
-            </div>
+          <div className="py-2">
+            <Input
+              placeholder="Full Name"
+              value={studentName}
+              onChange={(e) => setStudentName(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleConfirmExport()}
+              autoFocus
+              className="h-8 text-sm"
+            />
           </div>
-          <DialogFooter className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setShowNameDialog(false);
-                setStudentName('');
-              }}
-              disabled={isExporting}
-            >
+          <DialogFooter className="flex-row gap-2 justify-end">
+            <Button variant="ghost" size="sm" className="text-xs h-8" onClick={() => setShowNameDialog(false)}>
               Cancel
             </Button>
             <Button
+              size="sm"
+              className="text-xs h-8 px-4"
               onClick={handleConfirmExport}
               disabled={!studentName.trim() || isExporting}
-              className="bg-primary hover:bg-primary-dark"
             >
-              {isExporting ? 'Exporting...' : 'Export PDF'}
+              Export
             </Button>
           </DialogFooter>
         </DialogContent>
