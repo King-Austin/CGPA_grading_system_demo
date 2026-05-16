@@ -8,8 +8,18 @@ import StickyProgressBar from '@/components/StickyProgressBar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { GraduationCap, RotateCcw, Info } from 'lucide-react';
+import { GraduationCap, RotateCcw, Share2 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { usePrivy } from '@privy-io/react-auth';
+import { saveUserData, loadUserData } from '@/lib/cloudSync';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 const LOCAL_STORAGE_KEY = 'gpaTrackerData';
 const SAVE_DEBOUNCE_MS = 500;
@@ -23,6 +33,7 @@ interface AppData {
 }
 
 const Index = () => {
+  const { login, logout, ready, authenticated, user } = usePrivy();
   const [semestersData, setSemestersData] = useState<AppData>(() => {
     const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (savedData) {
@@ -38,6 +49,9 @@ const Index = () => {
   });
 
   const [stickyVisible, setStickyVisible] = useState(false);
+  const [showSyncSignInDialog, setShowSyncSignInDialog] = useState(false);
+  const [isStartingSignIn, setIsStartingSignIn] = useState(false);
+  const [showShareDialog, setShowShareDialog] = useState(false);
   const cgpaCardRef = useRef<HTMLDivElement>(null);
   const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -56,6 +70,10 @@ const Index = () => {
     if (cgpaCardRef.current) observer.observe(cgpaCardRef.current);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    // nothing: cloud sync is now explicit via the single Sync button
+  }, [ready, authenticated, user]);
 
   useEffect(() => {
     // Debounce localStorage writes to avoid performance lag
@@ -100,6 +118,70 @@ const Index = () => {
     });
   };
 
+  // Cloud save / load handlers
+  const saveToCloud = async () => {
+    if (!user) return alert('Please sign in to save to cloud');
+    try {
+      await saveUserData(user.id, semestersData);
+      alert('Saved to cloud');
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+      alert('Failed to save to cloud');
+    }
+  };
+
+  const handleSync = async () => {
+    if (!authenticated || !user) {
+      setShowSyncSignInDialog(true);
+      return;
+    }
+
+    try {
+      const cloud = await loadUserData(user.id);
+      if (!cloud) {
+        // no cloud data: upload local
+        await saveUserData(user.id, semestersData);
+        alert('No cloud data found — uploaded local data to cloud.');
+        return;
+      }
+
+      // If identical, nothing to do
+      if (JSON.stringify(cloud.data) === JSON.stringify(semestersData)) {
+        alert('Local and cloud data are already in sync.');
+        return;
+      }
+
+      const replace = confirm('Cloud data found. OK = Replace local with cloud. Cancel = Upload local to cloud.');
+      if (replace) {
+        setSemestersData(cloud.data);
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(cloud.data));
+        alert('Local data replaced with cloud data.');
+      } else {
+        await saveUserData(user.id, semestersData);
+        alert('Uploaded local data to cloud.');
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+      alert('Sync failed');
+    }
+  };
+
+  const handleConfirmSyncSignIn = async () => {
+    try {
+      setIsStartingSignIn(true);
+      await login();
+      setShowSyncSignInDialog(false);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      alert('Sign-in failed');
+    } finally {
+      setIsStartingSignIn(false);
+    }
+  };
+
   const handleResetData = () => {
     if (window.confirm('Reset all data? This cannot be undone.')) {
       localStorage.removeItem(LOCAL_STORAGE_KEY);
@@ -110,6 +192,39 @@ const Index = () => {
         }
       }
       setSemestersData(initialData);
+    }
+  };
+
+  const shareMessage = `Hey 👋\n\nI’ve been using this ECE CGPA tracker and it’s really helpful for tracking grades and GPA semester by semester.\n\nTry it here: ${window.location.origin}\n\nYou can also sync your data across devices.`;
+
+  const handleShareOnWhatsApp = () => {
+    const url = `https://wa.me/?text=${encodeURIComponent(shareMessage)}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleCopyShareMessage = async () => {
+    try {
+      await navigator.clipboard.writeText(shareMessage);
+      alert('Share message copied.');
+    } catch {
+      alert('Could not copy automatically. You can copy it manually from the message box.');
+    }
+  };
+
+  const handleNativeShare = async () => {
+    if (!navigator.share) {
+      alert('System share is not supported on this device.');
+      return;
+    }
+
+    try {
+      await navigator.share({
+        title: 'ECE CGPA Tracker',
+        text: shareMessage,
+        url: window.location.origin,
+      });
+    } catch {
+      // user canceled or unsupported payload; no action needed
     }
   };
 
@@ -139,12 +254,9 @@ const Index = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="text-[10px] font-medium text-muted-foreground mr-1">
-              {totalCompletedCourses}/{totalCourses} Graded
-            </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2">
               <ThemeToggle />
-              <DataExportImport semestersData={semestersData} totalCourses={totalCourses} totalCompletedCourses={totalCompletedCourses} />
+              <button onClick={handleSync} className="px-3 py-1 rounded bg-primary text-white text-sm">Sync</button>
             </div>
           </div>
         </header>
@@ -196,26 +308,89 @@ const Index = () => {
             <p className="text-[10px] font-semibold text-primary uppercase tracking-wider flex items-center gap-1">
               Appreciate the work?
             </p>
-            <p className="text-[10px] text-muted-foreground text-center leading-tight">
-               Support with a token 
-              <span className="font-bold text-foreground"> 09134846838</span>
-            </p>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 px-2 text-[10px] font-semibold text-primary hover:bg-primary/10"
+              onClick={() => setShowShareDialog(true)}
+            >
+              <Share2 className="h-3 w-3 mr-1" /> Share with colleagues
+            </Button>
           </div>
 
           <div className="flex items-center justify-between text-[10px] text-muted-foreground">
-            <div className="flex items-center gap-1">
-              <Info className="h-3 w-3" />
-              <span>Data stored locally in your browser</span>
-            </div>
+            <div />
             <div className="flex items-center gap-4">
               <button onClick={handleResetData} className="text-destructive hover:underline flex items-center gap-1">
                 <RotateCcw className="h-2.5 w-2.5" /> Reset
               </button>
-              <span>Built by KingAustin</span>
+              <a
+                href="https://nworahebuka.nworahsoft.codes/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary underline underline-offset-2 hover:opacity-90"
+              >
+                Built by KingAustin
+              </a>
             </div>
           </div>
         </footer>
       </div>
+
+      <Dialog open={showSyncSignInDialog} onOpenChange={setShowSyncSignInDialog}>
+        <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-md rounded-xl p-6">
+          <DialogHeader>
+            <DialogTitle className="text-base">Sync your data across devices</DialogTitle>
+            <DialogDescription className="text-sm leading-relaxed">
+              Sign in to securely sync your results to the cloud and access them on any device.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button
+              variant="ghost"
+              className="h-10"
+              onClick={() => setShowSyncSignInDialog(false)}
+              disabled={isStartingSignIn}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="h-10 bg-primary hover:bg-primary/90 text-primary-foreground"
+              onClick={handleConfirmSyncSignIn}
+              disabled={isStartingSignIn}
+            >
+              {isStartingSignIn ? 'Opening sign in...' : 'Continue to Sign in'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
+        <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-md rounded-xl p-6">
+          <DialogHeader>
+            <DialogTitle className="text-base">Share with colleagues</DialogTitle>
+            <DialogDescription className="text-sm leading-relaxed">
+              Use this ready message on WhatsApp or any platform.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="rounded-md border border-border bg-muted/30 p-3 text-xs whitespace-pre-line leading-relaxed">
+            {shareMessage}
+          </div>
+
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button variant="ghost" className="h-10" onClick={handleCopyShareMessage}>
+              Copy message
+            </Button>
+            <Button variant="outline" className="h-10" onClick={handleNativeShare}>
+              More apps
+            </Button>
+            <Button className="h-10 bg-primary hover:bg-primary/90 text-primary-foreground" onClick={handleShareOnWhatsApp}>
+              Share on WhatsApp
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

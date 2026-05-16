@@ -67,16 +67,16 @@ const DataExportImport: React.FC<DataExportImportProps> = ({
         <Button
           onClick={() => setShowNameDialog(true)}
           disabled={isExporting}
-          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-6 rounded-xl shadow-lg shadow-emerald-200 dark:shadow-none transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-6 rounded-xl shadow-md transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
         >
-          <div className="bg-white/20 p-1.5 rounded-lg">
-            <FileDown className="h-5 w-5" />
+          <div className="bg-white/10 p-1.5 rounded-lg">
+            <FileDown className="h-5 w-5 text-primary-foreground" />
           </div>
-          <div className="flex flex-col items-start leading-tight">
+          <div className="flex flex-col items-start leading-tight text-primary-foreground">
             <span className="text-sm">Download Academic Report</span>
             <span className="text-[10px] opacity-80 font-normal">Generate PDF for {totalCompletedCourses}/{totalCourses} courses</span>
           </div>
-          <ArrowRight className="h-4 w-4 ml-auto opacity-50" />
+          <ArrowRight className="h-4 w-4 ml-auto opacity-50 text-primary-foreground" />
         </Button>
 
         {/* Dialog reuse */}

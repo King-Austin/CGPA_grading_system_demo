@@ -160,9 +160,28 @@ Create a `.env` file for custom configuration:
 VITE_APP_TITLE="Course Score Scribe"
 VITE_APP_VERSION="1.0.0"
 
+# Auth
+VITE_PRIVY_APP_ID="your_privy_app_id"
+VITE_PRIVY_ENABLE_GOOGLE="false"
+
 # Optional: Analytics
 VITE_ANALYTICS_ID=""
 ```
+
+Set `VITE_PRIVY_ENABLE_GOOGLE` to `true` only after you enable Google sign-in inside the Privy dashboard.
+
+### Supabase Data Table
+Create the following table in Supabase for cloud sync:
+
+```sql
+create table if not exists public.cgpa_user_data (
+   user_id text primary key,
+   data jsonb not null default '{}'::jsonb,
+   updated_at timestamptz not null default now()
+);
+```
+
+The app reads and writes to `cgpa_user_data`.
 
 ### Build Configuration
 The app is configured for optimal performance:
