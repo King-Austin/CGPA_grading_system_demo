@@ -12,6 +12,7 @@ import { GraduationCap, RotateCcw, Info } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
 const LOCAL_STORAGE_KEY = 'gpaTrackerData';
+const SAVE_DEBOUNCE_MS = 500;
 
 interface SemesterData {
   [courseCode: string]: Course & { grade?: string };
@@ -38,6 +39,7 @@ const Index = () => {
 
   const [stickyVisible, setStickyVisible] = useState(false);
   const cgpaCardRef = useRef<HTMLDivElement>(null);
+  const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -56,7 +58,14 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(semestersData));
+    // Debounce localStorage writes to avoid performance lag
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = setTimeout(() => {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(semestersData));
+    }, SAVE_DEBOUNCE_MS);
+    return () => {
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    };
   }, [semestersData]);
 
   const handleGradeChange = (year: number, semesterNum: number, courseCode: string, newGrade: string) => {

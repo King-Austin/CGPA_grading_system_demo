@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Course, ALL_COURSES } from '@/data/courses';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus } from 'lucide-react';
@@ -18,17 +18,24 @@ const CourseSelection: React.FC<CourseSelectionProps> = ({
 }) => {
   const [selectedCourseCode, setSelectedCourseCode] = useState('');
 
-  const currentCourses = ALL_COURSES.filter(
-    c => c.year === year && c.semester === semester && !semesterCourses.some(sc => sc.code === c.code)
-  );
+  // Memoize the set of added course codes for O(1) lookups
+  const addedCourseSet = useMemo(() => new Set(semesterCourses.map(c => c.code)), [semesterCourses]);
 
-  // Get carryovers: same semester, previous years, not already added
-  // Exception: No carryovers for Year 4 Semester 2 (SIWES)
-  const carryoverCourses = (year === 4 && semester === 2) 
-    ? [] 
-    : ALL_COURSES.filter(
-        c => c.year < year && c.semester === semester && !semesterCourses.some(sc => sc.code === c.code)
-      );
+  const { currentCourses, carryoverCourses } = useMemo(() => {
+    const current = ALL_COURSES.filter(
+      c => c.year === year && c.semester === semester && !addedCourseSet.has(c.code)
+    );
+
+    // Get carryovers: same semester, previous years, not already added
+    // Exception: No carryovers for Year 4 Semester 2 (SIWES)
+    const carryover = (year === 4 && semester === 2) 
+      ? [] 
+      : ALL_COURSES.filter(
+          c => c.year < year && c.semester === semester && !addedCourseSet.has(c.code)
+        );
+    
+    return { currentCourses: current, carryoverCourses: carryover };
+  }, [year, semester, addedCourseSet]);
 
   // Group carryovers by year
   const carryoverByYear = carryoverCourses.reduce((acc, curr) => {
@@ -112,4 +119,4 @@ const CourseSelection: React.FC<CourseSelectionProps> = ({
   );
 };
 
-export default CourseSelection;
+export default React.memo(CourseSelection);

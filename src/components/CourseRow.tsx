@@ -103,4 +103,4 @@ const CourseRow: React.FC<CourseRowProps> = ({ course, grade, onGradeChange, onR
   );
 };
 
-export default CourseRow;
+export default React.memo(CourseRow);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Course } from '@/data/courses';
 import { calculateGPA, formatGPA, getGPAClass, getGPAColor, CourseWithGrade } from '@/utils/gradeUtils';
 import CourseRow from './CourseRow';
@@ -21,15 +21,16 @@ const Semester: React.FC<SemesterProps> = ({
   onAddCourse,
   onRemoveCourse,
 }) => {
-  const coursesWithGrades: CourseWithGrade[] = courses.map(c => ({
-    code: c.code, title: c.title, creditUnit: c.creditUnit, grade: c.grade,
-  }));
-
-  const semesterGPA = calculateGPA(coursesWithGrades);
-  const gpaClass = getGPAClass(semesterGPA);
-  const totalCredits = courses.reduce((s, c) => s + c.creditUnit, 0);
-  const completedCredits = courses.filter(c => c.grade).reduce((s, c) => s + c.creditUnit, 0);
-
+  const { coursesWithGrades, semesterGPA, gpaClass, totalCredits, completedCredits } = useMemo(() => {
+    const cwg: CourseWithGrade[] = courses.map(c => ({
+      code: c.code, title: c.title, creditUnit: c.creditUnit, grade: c.grade,
+    }));
+    const gpa = calculateGPA(cwg);
+    const gpaCls = getGPAClass(gpa);
+    const total = courses.reduce((s, c) => s + c.creditUnit, 0);
+    const completed = courses.filter(c => c.grade).reduce((s, c) => s + c.creditUnit, 0);
+    return { coursesWithGrades: cwg, semesterGPA: gpa, gpaClass: gpaCls, totalCredits: total, completedCredits: completed };
+  }, [courses]);
   return (
     <div className="rounded-md border border-border/40 bg-card/30 overflow-hidden w-full transition-colors hover:border-border/80">
       {/* Tiny Header */}
@@ -84,4 +85,4 @@ const Semester: React.FC<SemesterProps> = ({
   );
 };
 
-export default Semester;
+export default React.memo(Semester);
