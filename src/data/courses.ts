@@ -103,7 +103,20 @@ export const ALL_COURSES: Course[] = [
   { code: 'ECE527', title: 'Solid State Electronics', creditUnit: 3, year: 5, semester: 1, category: 'faculty' },
   { code: 'ECE539', title: 'Computer Architecture And Organisation', creditUnit: 3, year: 5, semester: 1, category: 'faculty' },
   { code: 'ECE541', title: 'AI And Robotics', creditUnit: 3, year: 5, semester: 1, category: 'faculty' },
-  { code: 'ECE500-SEM', title: 'Seminar', creditUnit: 2, year: 5, semester: 1, category: 'faculty' },
+  { code: 'ECE519', title: 'Seminar', creditUnit: 2, year: 5, semester: 1, category: 'faculty' },
+  { code: 'ECE529', title: 'System Programming', creditUnit: 3, year: 5, semester: 1, category: 'elective' },
+  { code: 'ECE531', title: 'Wireless Communication And Network Analysis', creditUnit: 3, year: 5, semester: 1, category: 'elective' },
+  { code: 'ECE535', title: 'Microwave Engineering', creditUnit: 3, year: 5, semester: 1, category: 'elective' },
+
+  // YEAR FIVE (500 LEVEL) - Second Semester
+  { code: 'ECE518', title: 'Project', creditUnit: 4, year: 5, semester: 2, category: 'faculty' },
+  { code: 'ECE538', title: 'Data Communication Network', creditUnit: 3, year: 5, semester: 2, category: 'faculty' },
+  { code: 'ECE542', title: 'Database Management Systems', creditUnit: 3, year: 5, semester: 2, category: 'faculty' },
+  { code: 'ECE554', title: 'Software Engineering', creditUnit: 3, year: 5, semester: 2, category: 'faculty' },
+  { code: 'ELE504', title: 'Network Analysis And Synthesis', creditUnit: 3, year: 5, semester: 2, category: 'faculty' },
+  { code: 'ELE574', title: 'Control System Engineering', creditUnit: 3, year: 5, semester: 2, category: 'faculty' },
+  { code: 'ECE534', title: 'Optic Fiber Communication Network', creditUnit: 3, year: 5, semester: 2, category: 'elective' },
+  { code: 'ECE536', title: 'Televisions, Satellite And Radar Engineering', creditUnit: 3, year: 5, semester: 2, category: 'elective' },
 ];
 
 export const getCoursesByYearAndSemester = (year: number, semester: number): Course[] => {
