@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { GraduationCap, RotateCcw, Share2 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { usePrivy } from '@privy-io/react-auth';
+import { toast } from 'sonner';
 import { saveUserData, loadUserData } from '@/lib/cloudSync';
 import {
   Dialog,
@@ -52,6 +53,9 @@ const Index = () => {
   const [showSyncSignInDialog, setShowSyncSignInDialog] = useState(false);
   const [isStartingSignIn, setIsStartingSignIn] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
+  const [showMergeDialog, setShowMergeDialog] = useState(false);
+  const [autoSyncEnabled, setAutoSyncEnabled] = useState(false);
+  const cloudSaveTimerRef = useRef<NodeJS.Timeout | null>(null);
   const cgpaCardRef = useRef<HTMLDivElement>(null);
   const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -72,8 +76,28 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    // nothing: cloud sync is now explicit via the single Sync button
-  }, [ready, authenticated, user]);
+    // When user signs in, check for cloud data and offer to merge
+    if (ready && authenticated && user && !autoSyncEnabled) {
+      (async () => {
+        try {
+          const cloud = await loadUserData(user.id);
+          if (cloud && JSON.stringify(cloud.data) !== JSON.stringify(semestersData)) {
+            setShowMergeDialog(true);
+          } else if (cloud) {
+            setAutoSyncEnabled(true);
+            toast.success('Cloud data loaded and matched local data.');
+          } else {
+            await saveUserData(user.id, semestersData);
+            setAutoSyncEnabled(true);
+            toast.success('Local data uploaded to cloud.');
+          }
+        } catch (err) {
+          console.error(err);
+          toast.error('Failed to load cloud data on signin.');
+        }
+      })();
+    }
+  }, [ready, authenticated, user, autoSyncEnabled]);
 
   useEffect(() => {
     // Debounce localStorage writes to avoid performance lag
@@ -98,6 +122,17 @@ const Index = () => {
       };
     });
   };
+
+  useEffect(() => {
+    if (!autoSyncEnabled || !user) return;
+    if (cloudSaveTimerRef.current) clearTimeout(cloudSaveTimerRef.current);
+    cloudSaveTimerRef.current = setTimeout(() => {
+      saveUserData(user.id, semestersData).catch(() => {
+        toast.error('Failed to auto-save to cloud.');
+      });
+    }, SAVE_DEBOUNCE_MS);
+    return () => { if (cloudSaveTimerRef.current) clearTimeout(cloudSaveTimerRef.current); };
+  }, [semestersData, autoSyncEnabled, user]);
 
   const handleAddCourse = (year: number, semesterNum: number, courseToAdd: Course) => {
     setSemestersData(prevData => {
@@ -174,11 +209,40 @@ const Index = () => {
       await login();
       setShowSyncSignInDialog(false);
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error(error);
-      alert('Sign-in failed');
+      toast.error('Sign-in failed');
     } finally {
       setIsStartingSignIn(false);
+    }
+  };
+
+  const handleMergeImport = async () => {
+    if (!user) return;
+    try {
+      const cloud = await loadUserData(user.id);
+      if (cloud) {
+        setSemestersData(cloud.data);
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(cloud.data));
+        setAutoSyncEnabled(true);
+        setShowMergeDialog(false);
+        toast.success('Cloud data imported.');
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to import cloud data.');
+    }
+  };
+
+  const handleMergeIgnore = async () => {
+    if (!user) return;
+    try {
+      await saveUserData(user.id, semestersData);
+      setAutoSyncEnabled(true);
+      setShowMergeDialog(false);
+      toast.success('Local data saved to cloud.');
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to save local data to cloud.');
     }
   };
 
@@ -257,6 +321,9 @@ const Index = () => {
             <div className="flex items-center gap-2">
               <ThemeToggle />
               <button onClick={handleSync} className="px-3 py-1 rounded bg-primary text-white text-sm">Sync</button>
+              {authenticated && user && (
+                <button onClick={() => logout()} className="px-3 py-1 rounded bg-destructive/20 text-destructive hover:bg-destructive/30 text-sm">Logout</button>
+              )}
             </div>
           </div>
         </header>
@@ -373,11 +440,9 @@ const Index = () => {
               Use this ready message on WhatsApp or any platform.
             </DialogDescription>
           </DialogHeader>
-
           <div className="rounded-md border border-border bg-muted/30 p-3 text-xs whitespace-pre-line leading-relaxed">
             {shareMessage}
           </div>
-
           <DialogFooter className="flex-col sm:flex-row gap-2">
             <Button variant="ghost" className="h-10" onClick={handleCopyShareMessage}>
               Copy message
@@ -387,6 +452,25 @@ const Index = () => {
             </Button>
             <Button className="h-10 bg-primary hover:bg-primary/90 text-primary-foreground" onClick={handleShareOnWhatsApp}>
               Share on WhatsApp
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showMergeDialog} onOpenChange={setShowMergeDialog}>
+        <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-md rounded-xl p-6">
+          <DialogHeader>
+            <DialogTitle className="text-base">Cloud data found</DialogTitle>
+            <DialogDescription className="text-sm leading-relaxed">
+              You have data saved in the cloud from another device. Would you like to import it or keep your current local data?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button variant="ghost" className="h-10" onClick={handleMergeIgnore}>
+              Keep local data
+            </Button>
+            <Button className="h-10 bg-primary hover:bg-primary/90 text-primary-foreground" onClick={handleMergeImport}>
+              Import cloud data
             </Button>
           </DialogFooter>
         </DialogContent>
