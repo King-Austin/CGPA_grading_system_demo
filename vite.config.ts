@@ -78,6 +78,8 @@ export default defineConfig(({ mode }) => ({
         ]
       },
       workbox: {
+        // Allow larger assets to be precached (default is 2 MiB)
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,csv}'],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
