@@ -1,8 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { calculateGPA, formatGPA, getGPAClass, getGPAColor, CourseWithGrade } from '@/utils/gradeUtils';
-import { Card, CardContent } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Trophy, Target, BookCheck, Award } from 'lucide-react';
+import { calculateGPA, formatGPA, getGPAClass, CourseWithGrade } from '@/utils/gradeUtils';
 import { useAnimatedCounter } from '@/hooks/useAnimatedCounter';
 import confetti from 'canvas-confetti';
 
@@ -60,26 +57,70 @@ const CGPACalculator: React.FC<CGPACalculatorProps> = ({ allSemestersData }) => 
   const totalGraded = Object.values(gradeDistribution).reduce((a,b) => a+b, 0);
 
   return (
-    <Card className="overflow-hidden border-none shadow-none bg-muted/20">
-      <CardContent className="p-2 space-y-2">
-        {/* Row 1: CGPA Big Info */}
-        <div className={`flex items-center justify-between p-2 rounded-md ${getSolidColor(cgpa)} text-white`}>
-          <div className="flex items-center gap-2">
-             <div className="p-1.5 rounded-full bg-white/20">
-               {getClassIcon(gpaClass.class)}
-             </div>
-             <div>
-               <div className="text-[10px] font-bold opacity-80 leading-none mb-0.5 uppercase tracking-tighter">Your CGPA</div>
-               <div className="text-xs font-medium leading-none opacity-90">{gpaClass.class}</div>
-             </div>
-          </div>
-          <div className="text-3xl font-black tabular-nums tracking-tighter">
+    <div className="rp-card-raised" style={{ padding: '1.25rem 1.5rem' }}>
+      {/* Eyebrow */}
+      <p className="rp-eyebrow" style={{ marginBottom: '0.75rem' }}>01 — Cumulative GPA</p>
+
+      {/* Main CGPA row */}
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '1rem', marginBottom: '1rem' }}>
+        <div>
+          <div style={{
+            fontFamily: 'var(--rp-font-serif)',
+            fontSize: 'clamp(52px, 10vw, 72px)',
+            fontWeight: 600,
+            lineHeight: 0.9,
+            letterSpacing: '-0.02em',
+            color: 'var(--rp-text-primary)',
+            fontVariantNumeric: 'tabular-nums',
+          }}>
             {formatGPA(animatedCgpa)}
+          </div>
+          <div className="rp-gpa-class-em">
+            {gpaClass.class}
           </div>
         </div>
 
-      </CardContent>
-    </Card>
+        {/* Progress ring / icon */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-end',
+          gap: '0.35rem',
+        }}>
+          <span style={{ fontFamily: 'var(--rp-font-mono)', fontSize: 10, color: 'var(--rp-text-muted)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+            Credits graded
+          </span>
+          <span style={{ fontFamily: 'var(--rp-font-mono)', fontSize: 22, fontWeight: 500, color: 'var(--rp-text-primary)', fontVariantNumeric: 'tabular-nums' }}>
+            {completedCredits}<span style={{ fontSize: 13, color: 'var(--rp-text-muted)' }}>/{totalCredits}</span>
+          </span>
+        </div>
+      </div>
+
+      {/* Progress bar */}
+      <div className="rp-bar-track">
+        <div className="rp-bar-fill" style={{ width: `${animatedProgress}%` }} />
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.35rem' }}>
+        <span style={{ fontFamily: 'var(--rp-font-mono)', fontSize: 10, color: 'var(--rp-text-ghost)' }}>0</span>
+        <span style={{ fontFamily: 'var(--rp-font-mono)', fontSize: 10, color: 'var(--rp-text-ghost)', fontVariantNumeric: 'tabular-nums' }}>
+          {Math.round(animatedProgress)}% complete
+        </span>
+        <span style={{ fontFamily: 'var(--rp-font-mono)', fontSize: 10, color: 'var(--rp-text-ghost)' }}>5.0</span>
+      </div>
+
+      {/* Grade distribution */}
+      {totalGraded > 0 && (
+        <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          {DIST_ORDER.filter(g => gradeDistribution[g]).map(g => (
+            <div key={g} className="rp-card-tinted" style={{ padding: '0.25rem 0.6rem', borderRadius: 'var(--rp-radius-sm)' }}>
+              <span style={{ fontFamily: 'var(--rp-font-mono)', fontSize: 10, color: 'var(--rp-accent-green)', fontWeight: 500 }}>
+                {g} <span style={{ color: 'var(--rp-text-muted)' }}>{gradeDistribution[g]}</span>
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 

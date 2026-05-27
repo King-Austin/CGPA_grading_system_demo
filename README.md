@@ -1,256 +1,213 @@
-# 📊 Course Score Scribe
+# ECE CGPA Tracker
 
-A comprehensive **GPA/CGPA tracking application** designed for university students to monitor their academic progress with live calculations, semester management, and detailed grade analytics.
+> *A custom-built academic tool for students in the Electrical and Computer Engineering department — because the school's mobile app was never going to be enough.*
 
-![Course Score Scribe](https://img.shields.io/badge/Status-Active-success?style=flat-square)
-![Version](https://img.shields.io/badge/Version-1.0.0-blue?style=flat-square)
+![Status](https://img.shields.io/badge/Status-Active-success?style=flat-square)
+![React](https://img.shields.io/badge/React-18-61dafb?style=flat-square)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square)
+![PWA](https://img.shields.io/badge/PWA-Installable-4CAF50?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
-![React](https://img.shields.io/badge/React-18.3.1-61dafb?style=flat-square)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178c6?style=flat-square)
-
-## ✨ Features
-
-### 🎯 **Core Functionality**
-- **Live GPA/CGPA Calculation** - Real-time grade point average computation
-- **Semester Management** - Organize courses by year and semester
-- **Grade Tracking** - Support for A-F grading scale with point values
-- **Course Management** - Add, remove, and organize courses with credit units
-- **Progress Monitoring** - Visual progress bars and completion statistics
-
-### 📱 **User Experience**
-- **Responsive Design** - Optimized for desktop, tablet, and mobile devices
-- **Progressive Web App (PWA)** - Installable on mobile devices
-- **Offline Support** - Works without internet connection
-- **Data Persistence** - Automatic local storage of all data
-- **Dark/Light Theme** - Modern UI with shadcn/ui components
-
-### 📄 **Data Management**
-- **PDF Export** - Generate comprehensive academic reports
-- **Data Backup** - Export and import grade data
-- **Reset Functionality** - Clear all data with confirmation
-- **Cross-device Sync** - Share data between devices
-
-### 🎨 **Visual Analytics**
-- **Grade Distribution Charts** - Visual representation of grade performance
-- **Academic Progress Tracking** - Semester-by-semester progress visualization
-- **GPA Classification** - Automatic class determination (First Class, Second Class, etc.)
-- **Credit Unit Tracking** - Monitor completed vs. total credit units
-
-## 🚀 Quick Start
-
-### Prerequisites
-- **Node.js** (v16 or higher)
-- **npm** or **yarn** package manager
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/King-Austin/course-score-scribe.git
-   cd course-score-scribe
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Start development server**
-   ```bash
-   npm run dev
-   ```
-
-4. **Open your browser**
-   ```
-   http://localhost:5173
-   ```
-
-### Build for Production
-
-```bash
-# Create optimized production build
-npm run build
-
-# Preview production build
-npm run preview
-```
-
-## 📖 Usage Guide
-
-### Getting Started
-1. **Add Courses**: Use the course selection dropdown to add courses to each semester
-2. **Enter Grades**: Select grades (A, B, C, D, E, F) for completed courses
-3. **Monitor Progress**: View live GPA calculations and progress indicators
-4. **Export Data**: Generate PDF reports of your academic performance
-
-### Grade Scale
-- **A** = 5.0 points (Excellent)
-- **B** = 4.0 points (Very Good)
-- **C** = 3.0 points (Good)
-- **D** = 2.0 points (Fair)
-- **E** = 1.0 points (Pass)
-- **F** = 0.0 points (Fail)
-
-### GPA Classification
-- **4.50+** = First Class
-- **3.50-4.49** = Second Class Upper
-- **2.50-3.49** = Second Class Lower
-- **1.50-2.49** = Third Class
-- **1.00-1.49** = Pass
-- **< 1.00** = Fail
-
-## 🛠️ Technology Stack
-
-### Frontend Framework
-- **React 18** - Modern React with hooks and concurrent features
-- **TypeScript** - Type-safe JavaScript for better development experience
-- **Vite** - Fast build tool and development server
-
-### UI/UX
-- **Tailwind CSS** - Utility-first CSS framework
-- **shadcn/ui** - Modern component library built on Radix UI
-- **Lucide React** - Beautiful icon library
-- **Recharts** - Chart library for data visualization
-
-### State Management
-- **React Hooks** - Built-in state management
-- **Local Storage** - Client-side data persistence
-- **TanStack Query** - Data fetching and caching
-
-### Development Tools
-- **ESLint** - Code linting and formatting
-- **PostCSS** - CSS processing
-- **Autoprefixer** - CSS vendor prefixing
-
-## 📱 Progressive Web App (PWA)
-
-Course Score Scribe is a fully functional PWA with the following capabilities:
-
-### Installation
-- **Desktop**: Click "Install" in the address bar (Chrome/Edge)
-- **Mobile**: Tap "Add to Home Screen" in mobile browsers
-
-### Offline Features
-- **Data Persistence** - All data saved locally
-- **Offline Access** - App works without internet
-- **Background Sync** - Data synchronization when online
-
-### App Manifest
-- Custom app icons and splash screens
-- Native app-like experience
-- Optimized for mobile devices
-
-## 📄 PDF Export
-
-Generate comprehensive academic reports with:
-
-- **Complete Grade History** - All courses and grades
-- **GPA Calculations** - Semester and cumulative GPAs
-- **Progress Statistics** - Credit completion and performance metrics
-- **Grade Distribution** - Visual breakdown of grades earned
-- **Academic Classification** - Final GPA class determination
-
-## 🔧 Configuration
-
-### Environment Variables
-Create a `.env` file for custom configuration:
-
-```env
-# Development
-VITE_APP_TITLE="Course Score Scribe"
-VITE_APP_VERSION="1.0.0"
-
-# Auth
-VITE_PRIVY_APP_ID="your_privy_app_id"
-VITE_PRIVY_ENABLE_GOOGLE="false"
-
-# Optional: Analytics
-VITE_ANALYTICS_ID=""
-```
-
-Set `VITE_PRIVY_ENABLE_GOOGLE` to `true` only after you enable Google sign-in inside the Privy dashboard.
-
-### Supabase Data Table
-Create the following table in Supabase for cloud sync:
-
-```sql
-create table if not exists public.cgpa_user_data (
-   user_id text primary key,
-   data jsonb not null default '{}'::jsonb,
-   updated_at timestamptz not null default now()
-);
-```
-
-The app reads and writes to `cgpa_user_data`.
-
-### Build Configuration
-The app is configured for optimal performance:
-
-- **Code Splitting** - Automatic route-based splitting
-- **Asset Optimization** - Image and font optimization
-- **CSS Minification** - Tailwind CSS purging
-- **Service Worker** - Offline functionality
-
-## 🚀 Deployment
-
-### Vercel (Recommended)
-1. **Connect Repository** to Vercel
-2. **Deploy Automatically** on git push
-3. **SPA Routing** configured via `vercel.json`
-
-### Other Platforms
-- **Netlify** - Drag & drop deployment
-- **GitHub Pages** - Static hosting
-- **Railway** - Full-stack deployment
-- **Docker** - Containerized deployment
-
-## 🤝 Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. **Fork the repository**
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-3. **Commit your changes**
-   ```bash
-   git commit -m 'Add amazing feature'
-   ```
-4. **Push to the branch**
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-5. **Open a Pull Request**
-
-### Development Guidelines
-- Follow TypeScript best practices
-- Write meaningful commit messages
-- Test on multiple devices/browsers
-- Maintain responsive design principles
-- Follow ESLint rules
-
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **shadcn/ui** for the beautiful component library
-- **Tailwind CSS** for the utility-first CSS framework
-- **Lucide** for the comprehensive icon set
-- **Vite** for the blazing fast build tool
-
-## 📞 Support
-
-For support, questions, or feature requests:
-
-- **Issues**: [GitHub Issues](https://github.com/King-Austin/course-score-scribe/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/King-Austin/course-score-scribe/discussions)
-- **Email**: support@nworahsoft.tech
 
 ---
 
-**Built with ❤️ by [Nworahsoft](https://nworahsoft.tech)**
+## The Problem
 
-*Track your academic journey with confidence and precision.*
+The school's official student portal can't keep up. Courses added late, non-departmental credit units missing, and no reliable way to know your standing before results come out officially. Students were doing manual calculations in notes apps, spreadsheets, or just guessing.
+
+This app is the fix. Built by a student, for students in the ECE department — so you can track every course, every credit unit, and your live CGPA at any point in the semester.
+
+---
+
+## What It Does
+
+You bring in your courses — from the school app, your course form, wherever — and add them here with their credit units and grades. The app calculates your CGPA live. If you switch phones or log in from a friend's device, your data follows you through cloud sync. If you'd rather keep it offline, it stays local. When you're done, you can export a PDF that mirrors the layout of a school transcript — useful for submissions while waiting for official signatures.
+
+This started as a personal tool. It's now something I give back to my department.
+
+---
+
+## Screenshots
+
+### Light Theme — CGPA Card & Grade Entry
+
+![Light theme interface](public/docs/light-theme.png)
+
+The main interface in light mode. Your cumulative GPA displays in large editorial type with your classification (*First Class*, *Second Class Upper*, etc.) shown in italic below it. Each year expands to show semester courses with inline grade selection.
+
+---
+
+### Dark Theme
+
+![Dark theme interface](public/docs/dark-theme.png)
+
+Full dark mode — designed as a first-class experience, not an afterthought. The accent color shifts from forest green to warm amber on italic text, per the design system. Toggle with the moon/sun button in the nav.
+
+---
+
+### Install, Export & Footer
+
+![Bottom panel — install, export, footer](public/docs/bottom-panel.png)
+
+The bottom of the app. Install it as a PWA for offline access, or download your Academic Report as a PDF — generated for however many courses you've graded. The footer includes a share button and a data reset option.
+
+---
+
+## Features
+
+### Grade Tracking
+- Add courses from any source — school portal, course form, department notice board
+- Credit units per course, A–F grading scale (5.0 system)
+- Live CGPA recalculates on every grade change
+- Semester GPA shown per semester, cumulative across all years
+- Grade distribution summary (how many As, Bs, etc.)
+
+### Cloud Sync (Optional)
+- Sign in with **Privy** (email, Google, or wallet — configurable)
+- Grades sync to **Supabase** in the background as you type
+- Load your data on any device, any browser
+- On first sign-in: if cloud and local data differ, you choose which to keep
+- Prefer to stay offline? Skip sign-in entirely — everything stays in `localStorage`
+
+### Export
+- **PDF Academic Report** — formatted like a transcript, with all courses, grades, credit units, semester GPAs, and your final CGPA
+- **JSON export/import** — back up and restore your raw grade data
+
+### PWA / Offline
+- Installable on Android and iOS ("Add to Home Screen")
+- Works fully offline once installed — no internet needed to view or update grades
+- Service worker caches all assets
+
+### UI
+- Light and dark mode, both fully designed
+- Sticky progress bar that appears as you scroll past the CGPA card
+- Responsive — built mobile-first, works well on every screen size
+- Cormorant Garamond serif + DM Mono type system (editorial, not generic)
+
+---
+
+## Grade Scale
+
+| Grade | Points | Classification |
+|-------|--------|----------------|
+| A | 5.0 | Excellent |
+| B | 4.0 | Very Good |
+| C | 3.0 | Good |
+| D | 2.0 | Fair |
+| E | 1.0 | Pass |
+| F | 0.0 | Fail |
+
+### CGPA Classification
+
+| Range | Class |
+|-------|-------|
+| 4.50 – 5.00 | First Class |
+| 3.50 – 4.49 | Second Class Upper |
+| 2.50 – 3.49 | Second Class Lower |
+| 1.50 – 2.49 | Third Class |
+| 1.00 – 1.49 | Pass |
+| Below 1.00 | Fail |
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | React 18 + TypeScript |
+| Build | Vite |
+| Styling | Tailwind CSS + custom Recivo design system |
+| Components | shadcn/ui (Radix UI primitives) |
+| Auth | Privy |
+| Database | Supabase (PostgreSQL) |
+| PDF | jsPDF |
+| PWA | vite-plugin-pwa |
+| Deployment | Vercel |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js v18+
+- npm or bun
+
+### Installation
+
+```bash
+git clone https://github.com/King-Austin/cgpa-tracker.git
+cd cgpa-tracker
+npm install
+```
+
+### Environment Variables
+
+Create a `.env` file at the project root:
+
+```env
+VITE_PRIVY_APP_ID=your_privy_app_id
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+To enable Google sign-in via Privy, turn it on in your Privy dashboard first, then it works automatically.
+
+### Run Locally
+
+```bash
+npm run dev
+# → http://localhost:5173
+```
+
+### Production Build
+
+```bash
+npm run build
+npm run preview
+```
+
+---
+
+## Supabase Setup
+
+Create this table in your Supabase project (SQL editor):
+
+```sql
+create table if not exists public.cgpa_user_data (
+  user_id text primary key,
+  data jsonb not null default '{}'::jsonb,
+  updated_at timestamptz not null default now()
+);
+```
+
+The app reads from and writes to `cgpa_user_data`. No other tables needed.
+
+---
+
+## Deployment
+
+The repo includes a `vercel.json` with SPA routing configured. Connect the repo to Vercel, add your environment variables in the project settings, and deploy. Every push to `main` deploys automatically.
+
+---
+
+## Contributing
+
+This project is open to contributions from ECE students and anyone who finds it useful.
+
+```bash
+git checkout -b feature/your-feature
+# make changes
+git commit -m "feat: describe your change"
+git push origin feature/your-feature
+# open a pull request
+```
+
+---
+
+## License
+
+MIT — use it, fork it, adapt it for your own department.
+
+---
+
+*Built by [KingAustin](https://nworahebuka.nworahsoft.codes/) · ECE Department · giving back to the department that shaped me.*

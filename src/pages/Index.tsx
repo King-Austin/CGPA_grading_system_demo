@@ -5,8 +5,6 @@ import CGPACalculator from '@/components/CGPACalculator';
 import DataExportImport from '@/components/DataExportImport';
 import InstallPWA from '@/components/InstallPWA';
 import StickyProgressBar from '@/components/StickyProgressBar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { GraduationCap, RotateCcw, Share2 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -305,36 +303,45 @@ const Index = () => {
     <div className="min-h-screen bg-background overflow-x-hidden">
       <StickyProgressBar allSemestersData={semestersData} visible={stickyVisible} />
 
-      <div className="container mx-auto px-2 py-2 max-w-lg lg:max-w-2xl">
-        {/* Ultra-tight Header */}
-        <header className="flex items-center justify-between gap-2 mb-2 px-1">
-          <div className="flex items-center gap-2">
-            <div className="p-1 rounded bg-primary/10">
-              <GraduationCap className="h-4 w-4 text-primary" />
-            </div>
-            <div>
-              <p className="text-[10px] font-bold text-primary uppercase tracking-wider">ECE Department</p>
-              <p className="text-[8px] text-muted-foreground -mt-0.5 italic">Built by student for students</p>
-            </div>
+      {/* ── Nav ── */}
+      <nav className="rp-nav">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <GraduationCap style={{ width: 16, height: 16, color: 'var(--rp-accent-green)' }} />
+          <div>
+            <span style={{
+              fontFamily: 'var(--rp-font-mono)',
+              fontSize: 10,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: 'var(--rp-accent-green)',
+              fontWeight: 500,
+            }}>ECE CGPA Tracker</span>
+            <div style={{
+              fontFamily: 'var(--rp-font-serif)',
+              fontSize: 11,
+              fontStyle: 'italic',
+              color: 'var(--rp-text-muted)',
+              lineHeight: 1.2,
+            }}>Built by student, for students</div>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2">
-              <ThemeToggle />
-              <button onClick={handleSync} className="px-3 py-1 rounded bg-primary text-white text-sm">Sync</button>
-              {authenticated && user && (
-                <button onClick={() => logout()} className="px-3 py-1 rounded bg-destructive/20 text-destructive hover:bg-destructive/30 text-sm">Logout</button>
-              )}
-            </div>
-          </div>
-        </header>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <ThemeToggle />
+          <button className="rp-btn-ghost" onClick={handleSync}>Sync ↑</button>
+          {authenticated && user && (
+            <button className="rp-btn-destructive" onClick={() => logout()}>Logout</button>
+          )}
+        </div>
+      </nav>
 
-        {/* CGPA Calculator */}
-        <div className="mb-2" ref={cgpaCardRef}>
+      <div style={{ maxWidth: 680, margin: '0 auto', padding: '1.5rem 1.25rem' }}>
+        {/* ── CGPA Calculator ── */}
+        <div style={{ marginBottom: '1.5rem' }} ref={cgpaCardRef}>
           <CGPACalculator allSemestersData={semestersData} />
         </div>
 
-        {/* Academic Years */}
-        <div className="space-y-1.5">
+        {/* ── Academic Years ── */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {academicYears.map((year) => {
             const s1 = Object.values(semestersData[`${year}-1`] || {});
             const s2 = Object.values(semestersData[`${year}-2`] || {});
@@ -358,120 +365,134 @@ const Index = () => {
           })}
         </div>
 
-        {/* Primary CTA: Install & Download - Moved to bottom */}
-        <div className="mt-6 mb-4 space-y-3 animate-slide-in-up">
+        {/* ── Bottom CTAs ── */}
+        <div style={{ marginTop: '2rem', marginBottom: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <InstallPWA />
-          <DataExportImport 
+          <DataExportImport
             variant="cta"
-            semestersData={semestersData} 
-            totalCourses={totalCourses} 
-            totalCompletedCourses={totalCompletedCourses} 
+            semestersData={semestersData}
+            totalCourses={totalCourses}
+            totalCompletedCourses={totalCompletedCourses}
           />
         </div>
 
-        {/* Ultra-minimal Footer */}
-        <footer className="mt-4 pb-6 px-2 flex flex-col gap-3 border-t pt-2 border-border/50">
-          <div className="flex flex-col items-center gap-1.5 p-2 rounded-lg bg-primary/5 border border-primary/10">
-            <p className="text-[10px] font-semibold text-primary uppercase tracking-wider flex items-center gap-1">
-              Appreciate the work?
-            </p>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 px-2 text-[10px] font-semibold text-primary hover:bg-primary/10"
+        {/* ── Footer ── */}
+        <footer style={{
+          marginTop: '2.5rem',
+          paddingBottom: '2.5rem',
+          borderTop: '0.5px solid var(--rp-border-default)',
+          paddingTop: '1.5rem',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1.25rem',
+        }}>
+          <div className="rp-card-tinted" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{
+              fontFamily: 'var(--rp-font-mono)',
+              fontSize: 10,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: 'var(--rp-accent-green)',
+            }}>Appreciate the work?</span>
+            <button
+              className="rp-btn-ghost"
+              style={{ display: 'flex', alignItems: 'center', gap: 4 }}
               onClick={() => setShowShareDialog(true)}
             >
-              <Share2 className="h-3 w-3 mr-1" /> Share with colleagues
-            </Button>
+              <Share2 style={{ width: 11, height: 11 }} /> Share
+            </button>
           </div>
 
-          <div className="flex items-center justify-between text-[10px] text-muted-foreground">
-            <div />
-            <div className="flex items-center gap-4">
-              <button onClick={handleResetData} className="text-destructive hover:underline flex items-center gap-1">
-                <RotateCcw className="h-2.5 w-2.5" /> Reset
-              </button>
-              <a
-                href="https://nworahebuka.nworahsoft.codes/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary underline underline-offset-2 hover:opacity-90"
-              >
-                Built by KingAustin
-              </a>
-            </div>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            gap: '1.5rem',
+          }}>
+            <button
+              onClick={handleResetData}
+              className="rp-btn-destructive"
+              style={{ display: 'flex', alignItems: 'center', gap: 4 }}
+            >
+              <RotateCcw style={{ width: 10, height: 10 }} /> Reset
+            </button>
+            <a
+              href="https://nworahebuka.nworahsoft.codes/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontFamily: 'var(--rp-font-mono)',
+                fontSize: 10,
+                color: 'var(--rp-accent-green)',
+                textDecoration: 'underline',
+                textUnderlineOffset: 3,
+              }}
+            >
+              Built by KingAustin
+            </a>
           </div>
         </footer>
       </div>
 
+      {/* ── Dialogs ── */}
       <Dialog open={showSyncSignInDialog} onOpenChange={setShowSyncSignInDialog}>
-        <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-md rounded-xl p-6">
+        <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-md rounded-xl p-6"
+          style={{ background: 'var(--rp-bg-raised)', border: '0.5px solid var(--rp-border-default)' }}>
           <DialogHeader>
-            <DialogTitle className="text-base">Sync your data across devices</DialogTitle>
-            <DialogDescription className="text-sm leading-relaxed">
+            <DialogTitle style={{ fontFamily: 'var(--rp-font-serif)', fontSize: 20, fontWeight: 600 }}>
+              Sync your data across devices
+            </DialogTitle>
+            <DialogDescription style={{ fontFamily: 'var(--rp-font-mono)', fontSize: 12, color: 'var(--rp-text-muted)' }}>
               Sign in to securely sync your results to the cloud and access them on any device.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex-col sm:flex-row gap-2">
-            <Button
-              variant="ghost"
-              className="h-10"
-              onClick={() => setShowSyncSignInDialog(false)}
-              disabled={isStartingSignIn}
-            >
+            <button className="rp-btn-ghost" onClick={() => setShowSyncSignInDialog(false)} disabled={isStartingSignIn}>
               Cancel
-            </Button>
-            <Button
-              className="h-10 bg-primary hover:bg-primary/90 text-primary-foreground"
-              onClick={handleConfirmSyncSignIn}
-              disabled={isStartingSignIn}
-            >
-              {isStartingSignIn ? 'Opening sign in...' : 'Continue to Sign in'}
-            </Button>
+            </button>
+            <button className="rp-btn-cta" onClick={handleConfirmSyncSignIn} disabled={isStartingSignIn}>
+              {isStartingSignIn ? 'Opening sign in…' : 'Continue to Sign in ↗'}
+            </button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
-        <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-md rounded-xl p-6">
+        <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-md rounded-xl p-6"
+          style={{ background: 'var(--rp-bg-raised)', border: '0.5px solid var(--rp-border-default)' }}>
           <DialogHeader>
-            <DialogTitle className="text-base">Share with colleagues</DialogTitle>
-            <DialogDescription className="text-sm leading-relaxed">
+            <DialogTitle style={{ fontFamily: 'var(--rp-font-serif)', fontSize: 20, fontWeight: 600 }}>
+              Share with colleagues
+            </DialogTitle>
+            <DialogDescription style={{ fontFamily: 'var(--rp-font-mono)', fontSize: 12, color: 'var(--rp-text-muted)' }}>
               Use this ready message on WhatsApp or any platform.
             </DialogDescription>
           </DialogHeader>
-          <div className="rounded-md border border-border bg-muted/30 p-3 text-xs whitespace-pre-line leading-relaxed">
+          <div className="rp-card-surface" style={{ padding: '0.75rem 1rem', fontSize: 12, whiteSpace: 'pre-line', lineHeight: 1.6, fontFamily: 'var(--rp-font-mono)' }}>
             {shareMessage}
           </div>
           <DialogFooter className="flex-col sm:flex-row gap-2">
-            <Button variant="ghost" className="h-10" onClick={handleCopyShareMessage}>
-              Copy message
-            </Button>
-            <Button variant="outline" className="h-10" onClick={handleNativeShare}>
-              More apps
-            </Button>
-            <Button className="h-10 bg-primary hover:bg-primary/90 text-primary-foreground" onClick={handleShareOnWhatsApp}>
-              Share on WhatsApp
-            </Button>
+            <button className="rp-btn-ghost" onClick={handleCopyShareMessage}>Copy message</button>
+            <button className="rp-btn-ghost" onClick={handleNativeShare}>More apps</button>
+            <button className="rp-btn-cta" onClick={handleShareOnWhatsApp}>Share on WhatsApp ↗</button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       <Dialog open={showMergeDialog} onOpenChange={setShowMergeDialog}>
-        <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-md rounded-xl p-6">
+        <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-md rounded-xl p-6"
+          style={{ background: 'var(--rp-bg-raised)', border: '0.5px solid var(--rp-border-default)' }}>
           <DialogHeader>
-            <DialogTitle className="text-base">Cloud data found</DialogTitle>
-            <DialogDescription className="text-sm leading-relaxed">
-              You have data saved in the cloud from another device. Would you like to import it or keep your current local data?
+            <DialogTitle style={{ fontFamily: 'var(--rp-font-serif)', fontSize: 20, fontWeight: 600 }}>
+              Cloud data found
+            </DialogTitle>
+            <DialogDescription style={{ fontFamily: 'var(--rp-font-mono)', fontSize: 12, color: 'var(--rp-text-muted)' }}>
+              You have data saved in the cloud from another device. Import it or keep your current local data?
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex-col sm:flex-row gap-2">
-            <Button variant="ghost" className="h-10" onClick={handleMergeIgnore}>
-              Keep local data
-            </Button>
-            <Button className="h-10 bg-primary hover:bg-primary/90 text-primary-foreground" onClick={handleMergeImport}>
-              Import cloud data
-            </Button>
+            <button className="rp-btn-ghost" onClick={handleMergeIgnore}>Keep local data</button>
+            <button className="rp-btn-cta" onClick={handleMergeImport}>Import cloud data ↗</button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

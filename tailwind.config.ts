@@ -14,6 +14,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        serif: ["'Cormorant Garamond'", "Georgia", "serif"],
+        mono: ["'DM Mono'", "'JetBrains Mono'", "monospace"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -23,22 +27,22 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
-          light: "hsl(var(--primary-light))",
-          dark: "hsl(var(--primary-dark))",
+          light: "hsl(var(--primary-light, var(--primary)))",
+          dark: "hsl(var(--primary-dark, var(--primary)))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
         success: {
-          DEFAULT: "hsl(var(--success))",
-          foreground: "hsl(var(--success-foreground))",
-          light: "hsl(var(--success-light))",
+          DEFAULT: "#1F4A35",
+          foreground: "#ECEAE4",
+          light: "#2A6347",
         },
         warning: {
-          DEFAULT: "hsl(var(--warning))",
-          foreground: "hsl(var(--warning-foreground))",
-          light: "hsl(var(--warning-light))",
+          DEFAULT: "#D4A853",
+          foreground: "#1C1C1A",
+          light: "rgba(212,168,83,0.15)",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -55,7 +59,7 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
-          border: "hsl(var(--card-border))",
+          border: "hsl(var(--border))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
